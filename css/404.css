@@ -1,3 +1,4 @@
+html,
         body {
             margin: 0;
             padding: 0;
@@ -24,6 +25,7 @@
             -ms-transform: translateY(-50%);
             transform: translateY(-50%);
         }
+
         .return {
             color: rgba(255, 255, 255, 0.7);
             margin: 0;
@@ -41,6 +43,7 @@
             -webkit-transition: border-color 0.1s ease-in;
             transition: border-color 0.1s ease-in;
         }
+
         .return a:hover {
             border-bottom-color: #fff;
         }
