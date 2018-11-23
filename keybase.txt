@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/cubityfirst
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://cubityfir.st
+  * I am cubityfirst (https://keybase.io/cubityfirst) on keybase.
+  * I have a public key with fingerprint C0F3 D1CC C94C 8E2F 0F37  24DD CEEF CB3E FFF0 832A
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101443d33dd6459557697451ad09984e66477a77e2c80b4b8cd6cdcc48b9ef092c30a",
+      "fingerprint": "c0f3d1ccc94c8e2f0f3724ddceefcb3efff0832a",
+      "host": "keybase.io",
+      "key_id": "ceefcb3efff0832a",
+      "kid": "0101443d33dd6459557697451ad09984e66477a77e2c80b4b8cd6cdcc48b9ef092c30a",
+      "uid": "966ff2a854d554e0ec6d3f038c25c619",
+      "username": "cubityfirst"
+    },
+    "service": {
+      "hostname": "cubityfir.st",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1542978443,
+  "expire_in": 157680000,
+  "prev": "aa9c74afca17c8d8693e667797b2905f21d4af4dc221beba7699d0bd224e123d",
+  "seqno": 5,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.80
+Comment: https://keybase.io/crypto
+
+yMIjAnicrVJbSBRRGN5Vu7gqBhWFiMFI4cNqc585o/UUSVlRkSZqbjPnnFlH3dlt
+d7xjpGBZRkSuVvqQSIQmIdVLYGRKbomoFIIvG4ZP2UWyHuyC2Rmpl+ix83L4z//9
+3/m+j/9ZUqzD5VT6wBR7fGeGc2Kkq8pRvPyjrYHS/KiOUhqoCrx24UqEQ5anwkCU
+QtEMzfA8hzgOIZEXgCBIIpB4gVERDYDMY1HkJUmVJMxCmdZ4TYZIhAhCXtYA1mnA
+Qo5WKTelG6YXBwNBw7QILaR1DjEQQsBDGbM6KSWWRwhirEONw7qu0zLH2oNl/pA9
+QcRpaghnGX7yRgrPmrx/4P+z7qo1OiCKus6qssAjQeAxjaGIOJ3mZMgKUGSADQzh
+oKn6sK2qSjOsOt0IEuWNboo0qg2I7WxtM3+DsgjKTQWCfssP/ZWkU2ZZgZBiT1p1
+ARtagzXPbxKPZpiIREkmqnEwZPhNSmEIElqGzcoIPAskmTh3U7g2YASxx7ARxL1M
+k2P/g6sJpaoCKPGqDlVGgjKSRcCRSCQJSBoLaEFnGUS6PIIsy2hYU0l6ANEaYlke
+MyyHKNvWGdNPKQKRqXoJZcjwmqpVFcRU4+jTkjiH0+VYvy7GXjGHK37Tn8XL+7LR
+EU5vcW3jXi/mpnhSX3WMXt3VoQ/FJRbf7V+MZuffefHynnfuZORojK83P7U9T2nN
+iqQtD97ILyngOuMHZ243LZ2KZO0uetR0IL2rdKWwvST6uLCvMO1wQup9b+7pii0L
+e89fiFnunR9bGVnvmy163hIdLu5YbXs/1dHwcaX3TfvbeeOQLzZcu+dmWE3pV+We
+mkkTnR2bODg7MD799dr18eSGh5nvaoc3Z39OGFObacVZnjGJs3tKW5du7ZvujNb7
+rEihc1UUh7q7E8Ojl5I/+OaqyzOT6s992/H9yUIOmi0+AbZ29Q2M9Ox/kJH0U76S
+03P54qdj881HthcMuzZ0zvwCBkZF7g==
+=5N4b
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/cubityfirst
+
+==================================================================
