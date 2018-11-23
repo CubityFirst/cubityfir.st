@@ -83,6 +83,7 @@ canvas{
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
+/*Legacy / Currently not in use, might be in the future*/
 .logo {
     position: absolute;
     height: 250px;
