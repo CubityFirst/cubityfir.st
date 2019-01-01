@@ -8,7 +8,7 @@ $.fn.extend({
                 MozAnimation: 'mozAnimationEnd',
                 WebkitAnimation: 'webkitAnimationEnd',
             };
-
+            
             for (var t in animations) {
                 if (el.style[t] !== undefined) {
                     return animations[t];
@@ -26,33 +26,29 @@ $.fn.extend({
     },
 });
 
-function hide() {
-    var div = $('.main');
+$(document).ready(function () {
     var infoDiv = $('.infoDiv');
-    infoDiv.text('󠀡');
-    document.getElementById("hideMe").style.color = '#242424';
-}
 
-function showDiscord() {
-    var div = $('.main');
-    var infoDiv = $('.infoDiv');
-    infoDiv.animateCss('tada');
-    infoDiv.text('Cubity_First#0001');
-    document.getElementById("hideMe").style.color = 'white';
-}
+    hide = function () {
+        infoDiv.text('󠀡');
+        document.getElementById("hideMe").style.color = '#242424';
+    }
 
-function showBackpack() {
-    var div = $('.main');
-    var infoDiv = $('.infoDiv');
-    infoDiv.animateCss('tada');
-    infoDiv.text('cubityfir.st/bp');
-    document.getElementById("hideMe").style.color = 'white';
-}
+    showDiscord = function () {
+        infoDiv.animateCss('tada');
+        infoDiv.text('Cubity_First#0001');
+        document.getElementById("hideMe").style.color = 'white';
+    }
 
-function showSteam() {
-    var div = $('.main');
-    var infoDiv = $('.infoDiv');
-    infoDiv.animateCss('tada');
-    infoDiv.text('cubityfir.st/offer');
-    document.getElementById("hideMe").style.color = 'white';
-}
+    showBackpack = function () {
+        infoDiv.animateCss('tada');
+        infoDiv.text('cubityfir.st/bp');
+        document.getElementById("hideMe").style.color = 'white';
+    }
+
+    showSteam = function () {
+        infoDiv.animateCss('tada');
+        infoDiv.text('cubityfir.st/offer');
+        document.getElementById("hideMe").style.color = 'white';
+    }
+});
