@@ -46,6 +46,7 @@ function showTwitter() {
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
     infoDiv.text('cubityfir.st/bp')
+    document.getElementById("hideMe").style.color = 'white';
 }
 
 function showSteam() {
@@ -53,7 +54,7 @@ function showSteam() {
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
     infoDiv.text('cubityfir.st/offer')
-    infoDiv.setAttribute("href", "https://cubityfir.st/offer");
+    document.getElementById("hideMe").style.color = 'white';
 }
 
 $(function() {
