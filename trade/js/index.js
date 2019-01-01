@@ -32,12 +32,14 @@ function showDiscord() {
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
     infoDiv.text('Cubity_First#0001')
+    infoDiv.style.color = "#000";
 }
 function hide() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
-    infoDiv.text('')
+    infoDiv.text('Test')
+    infoDiv.style.color = "#242424";
 }
 
 function showTwitter() {
