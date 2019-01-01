@@ -41,7 +41,7 @@ function showTwitter() {
     infoDiv.text('cubityfir.st/bp')
 }
 
-function showGit() {
+function showSteam() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
