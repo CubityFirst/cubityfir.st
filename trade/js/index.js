@@ -38,7 +38,7 @@ function showTwitter() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
-    infoDiv.text('@DeJayDev')
+    infoDiv.text('cubityfir.st/bp')
 }
 
 function showGit() {
