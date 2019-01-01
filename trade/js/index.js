@@ -31,7 +31,7 @@ function showDiscord() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
-    infoDiv.text('DeJay#1337')
+    infoDiv.text('Cubity_First#0001')
 }
 
 function showTwitter() {
@@ -41,11 +41,11 @@ function showTwitter() {
     infoDiv.text('@DeJayDev')
 }
 
-function showGit() {
+function showSteam() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
-    infoDiv.text('DeJayDev')
+    infoDiv.text(<a href="https://cubityfir.st/offer">cubityfir.st/offer</a>)
 }
 
 $(function() {
