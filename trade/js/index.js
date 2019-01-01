@@ -33,6 +33,12 @@ function showDiscord() {
     infoDiv.animateCss('tada')
     infoDiv.text('Cubity_First#0001')
 }
+function hideDiscord() {
+    var div = document.getElementsByClassName("main")[0];
+    var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
+    infoDiv.animateCss('tada')
+    infoDiv.text('')
+}
 
 function showTwitter() {
     var div = document.getElementsByClassName("main")[0];
