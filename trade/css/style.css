@@ -58,3 +58,7 @@ a:link, a:visited, a:hover, a:active {
 .infoDiv {
 display: block;
 }
+
+#hideMe {
+color: #242424;
+}
