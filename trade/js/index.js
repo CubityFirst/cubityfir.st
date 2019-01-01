@@ -45,7 +45,7 @@ function showGit() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
-    infoDiv.text('<a href="https://cubityfir.st/offer">cubityfir.st/offer</a>')
+    infoDiv.text('cubityfir.st/offer')
 }
 
 $(function() {
