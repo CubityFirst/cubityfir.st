@@ -42,9 +42,10 @@ function showTwitter() {
 }
 
 function showSteam() {
-    var infoDiv = document.getElementsByClassName("infoDiv")[0];
-    infoDiv.animateCss('tada');
-    infoDiv.text('cubityfir.st/offer');
+    var div = document.getElementsByClassName("main")[0];
+    var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
+    infoDiv.animateCss('tada')
+    infoDiv.text('cubityfir.st/offer')
     infoDiv.setAttribute("href", "https://cubityfir.st/offer");
 }
 
