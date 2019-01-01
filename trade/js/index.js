@@ -37,7 +37,7 @@ function showDiscord() {
 function hide() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
-    infoDiv.text('Blank')
+    infoDiv.text('󠀡')
     document.getElementById("hideMe").style.color = '#242424';
 }
 
