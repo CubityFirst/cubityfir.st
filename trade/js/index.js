@@ -32,13 +32,13 @@ function showDiscord() {
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
     infoDiv.text('Cubity_First#0001')
-    div.style.color = "#FFFFFF";
+    document.getElementById("hideMe").style.color = 'white';
 }
 function hide() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.text('Blank')
-    div.style.color = "#242424";
+    document.getElementById("hideMe").style.color = '#242424';
 }
 
 function showTwitter() {
