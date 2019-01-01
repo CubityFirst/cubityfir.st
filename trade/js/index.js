@@ -41,7 +41,7 @@ function showTwitter() {
     infoDiv.text('@DeJayDev')
 }
 
-function showSteam() {
+function showGit() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
