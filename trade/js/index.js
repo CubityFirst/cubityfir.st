@@ -41,7 +41,7 @@ function hide() {
     document.getElementById("hideMe").style.color = '#242424';
 }
 
-function showTwitter() {
+function showBackpack() {
     var div = document.getElementsByClassName("main")[0];
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
