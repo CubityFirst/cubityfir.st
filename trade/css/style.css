@@ -38,16 +38,12 @@ body {
     color: #7289DA;
 }
 
-.fa-twitter:hover {
-    color: #00aced;
+.fa-box-open:hover {
+    color: #CAA982;
 }
 
-.fa-github:hover {
-    color: #4078c0;
-}
-
-.fa-at:hover {
-    color: #dd4b39;
+.fa-steam:hover {
+    color: #00AEEF;
 }
 
 a:link, a:visited, a:hover, a:active {
