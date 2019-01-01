@@ -32,7 +32,7 @@ function showDiscord() {
     var infoDiv = $(div.getElementsByClassName("infoDiv")[0]);
     infoDiv.animateCss('tada')
     infoDiv.text('Cubity_First#0001')
-    div.style.color = "#000";
+    div.style.color = "#FFFFFF";
 }
 function hide() {
     var div = document.getElementsByClassName("main")[0];
