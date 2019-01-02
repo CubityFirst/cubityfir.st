@@ -21,13 +21,16 @@ $.fn.extend({
 
             if (typeof callback === 'function') callback();
         });
-
         return this;
     },
 });
 
 $(document).ready(function () {
     var infoDiv = $('.infoDiv');
+
+    changeColor = function () {
+        document.getElementById("hideMe").style.color = 'white';
+    }
 
     hide = function () {
         infoDiv.text('󠀡');
@@ -37,18 +40,18 @@ $(document).ready(function () {
     showDiscord = function () {
         infoDiv.animateCss('tada');
         infoDiv.text('Cubity_First#0001');
-        document.getElementById("hideMe").style.color = 'white';
+        changeColor();
     }
 
     showBackpack = function () {
         infoDiv.animateCss('tada');
         infoDiv.text('cubityfir.st/bp');
-        document.getElementById("hideMe").style.color = 'white';
+        changeColor();
     }
 
     showSteam = function () {
         infoDiv.animateCss('tada');
         infoDiv.text('cubityfir.st/offer');
-        document.getElementById("hideMe").style.color = 'white';
+        changeColor();
     }
 });
