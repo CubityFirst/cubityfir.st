@@ -24,7 +24,7 @@ $.fn.extend({
 $(document).ready(function () {
     var infoDiv = $('.infoDiv');
 
-    changeColor = function () {
+    changeColor = function (color) {
         document.getElementById("hideMe").style.color = 'white';
     }
 
