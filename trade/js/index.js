@@ -25,7 +25,7 @@ $(document).ready(function () {
     var infoDiv = $('.infoDiv');
 
     changeColor = function (color) {
-        document.getElementById("hideMe").style.color = 'white';
+        document.getElementById("hideMe").style.color = '#fff';
     }
 
     hide = function () {
@@ -33,21 +33,9 @@ $(document).ready(function () {
         document.getElementById("hideMe").style.color = '#242424';
     }
 
-    showDiscord = function () {
+    showText = function (LocalText) {
         infoDiv.animateCss('tada');
-        infoDiv.text('Cubity_First#0001');
-        changeColor();
-    }
-
-    showBackpack = function () {
-        infoDiv.animateCss('tada');
-        infoDiv.text('cubityfir.st/bp');
-        changeColor();
-    }
-
-    showSteam = function () {
-        infoDiv.animateCss('tada');
-        infoDiv.text('cubityfir.st/offer');
+        infoDiv.text(LocalText);
         changeColor();
     }
 });

@@ -34,17 +34,9 @@ body {
     margin-right: 1.25vw;
 }
 
-.fa-discord:hover {
-    color: #7289DA;
-}
-
-.fa-box-open:hover {
-    color: #CAA982;
-}
-
-.fa-steam:hover {
-    color: #00AEEF;
-}
+.fa-discord:hover {color: #7289DA;}
+.fa-box-open:hover {color: #CAA982;}
+.fa-steam:hover {color: #00AEEF;}
 
 a:link, a:visited, a:hover, a:active {
     color: white;
