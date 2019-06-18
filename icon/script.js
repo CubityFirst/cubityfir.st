@@ -1,39 +1,3 @@
-function share(){
-try {
-    var img = document.getElementById('canvas').toDataURL('image/png', 0.9).split(',')[1];
-} catch(e) {
-    var img = document.getElementById('canvas').toDataURL().split(',')[1];
-}
-$('#im').text("Imgur is processing; standby.");
-
-
-$.ajax({
-    url: 'https://api.imgur.com/3/image',
-    type: 'post',
-    headers: {
-        Authorization: 'Client-ID ceb0613b2b28522'
-    },
-    data: {
-        image: img,
-        title: $('#gen').val()
-    },
-    dataType: 'json',
-    success: function(response) {
-        if(response.success) {
-            url = response.data.link;
-            window.location = url;
-          $('#im').text("Done.");
-
-            return url;
-        }
-        else
-        $('#im').text("There was an issue with the connection.");
-
-    }
-});
-}
-
-
 var canvas, context, hw, aw, ah, map, ow, col, url;
 window.charmap;
 window.numToGen;
