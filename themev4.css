@@ -6,6 +6,10 @@
 ==========================
 */
 
+canvas { 
+	position:absolute;
+}
+
 html {
 	height:100%;
 }
