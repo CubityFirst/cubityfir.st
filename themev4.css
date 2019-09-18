@@ -107,7 +107,7 @@ img {
 	position: relative;
 	margin: 0;
 	transition: filter 0.2s ease, transform 0.4s ease;*/
-	  width: 100vw;
+	  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
