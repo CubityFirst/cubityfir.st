@@ -1,3 +1,7 @@
+.boxcontainer {
+  position: absolute;
+}
+
 /* cyrillic-ext */
 @font-face {
   font-family: 'Roboto Mono';
