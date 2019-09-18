@@ -1,3 +1,6 @@
+canvas {
+  position: relative;
+}
 .boxcontainer {
   position: absolute;
 }
