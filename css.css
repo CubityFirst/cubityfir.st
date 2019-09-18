@@ -103,11 +103,8 @@ img {
 .linkcont {
 	margin: 0 auto;
 	width: auto;
-	display: inline-block;
 	position: relative;
-	margin: 0;
 	transition: filter 0.2s ease, transform 0.4s ease;
-	  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
