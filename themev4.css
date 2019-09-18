@@ -139,6 +139,8 @@ svg {
   width: 50px;
   fill: black;
 }
+canvas{
+	position:absolute;
 /*
 ==========================
 
