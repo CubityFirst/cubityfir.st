@@ -137,6 +137,9 @@ svg {
   padding: 10px
 }
 /*
+.clickable {
+pointer-events: none
+}
 ==========================
 
 		ANIM
