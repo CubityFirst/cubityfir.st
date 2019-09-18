@@ -3,6 +3,7 @@ canvas {
 }
 .boxcontainer {
   z-index: 10;
+  position: absolute;
 }
 
 /* cyrillic-ext */
