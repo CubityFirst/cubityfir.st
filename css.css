@@ -6,6 +6,7 @@ canvas {
   top: 0px;
   z-index: 10;
   position: absolute;
+  pointer-events: none;
 }
 
 /* cyrillic-ext */
