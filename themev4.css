@@ -29,6 +29,9 @@ a {
 	cursor: pointer;
 }
 
+.telegram path{
+  transform: translate(60px, 60px)
+}
 /*
 ==========================
 
