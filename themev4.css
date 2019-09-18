@@ -135,8 +135,8 @@ img {
   transform: translate(100px, 120px)
 }
 svg {
-  height: 10.5em;
-  width: 10.5em;
+  height: 50px;
+  width: 50px;
   fill: black;
   margin: 50px;
 }
