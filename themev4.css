@@ -134,6 +134,12 @@ img {
 .discord path{
   transform: translate(100px, 120px)
 }
+svg {
+  height: 10.5em;
+  width: 10.5em;
+  fill: black;
+  margin: 50px;
+}
 /*
 ==========================
 
