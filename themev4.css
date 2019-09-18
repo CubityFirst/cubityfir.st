@@ -125,6 +125,9 @@ img {
 .telegram path{
   transform: translate(60px, 60px)
 }
+.discord path{
+  transform: translate(100px, 120px)
+}
 /*
 ==========================
 
