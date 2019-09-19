@@ -35,11 +35,6 @@ a {
 		MAIN
 ==========================
 */
-.MainPic:hover {
-    content: url('red.gif');
-    height: 150px;
-    width: 150px;
-}
 
 .boxcontainer {
     height: auto;
@@ -62,11 +57,6 @@ a {
 
 #dirbox {
 	display: none;
-}
-
-img {
-	height: 128px;
-	width: auto;
 }
 
 .title {
