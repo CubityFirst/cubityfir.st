@@ -21,6 +21,8 @@ body {
 	font-weight: 400;
 	cursor: default;
 	display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 a {
