@@ -141,6 +141,9 @@ svg {
 .clickable {
 pointer-events: none
 }
+.unclickable {
+pointer-events: auto
+}
 ==========================
 
 		ANIM
