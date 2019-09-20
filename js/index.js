@@ -12,9 +12,10 @@ function switchVisible() {
 }
 
 function NGGYU() {
-   var EasterEggChance = Math.floor((Math.random() * 100) + 1);
-   console.log ("Easter Egg: " + EasterEggChance);
+   var EasterEggChance = Math.floor((Math.random() * 1) + 1);
+   //console.log ("Easter Egg: " + EasterEggChance);
    if (EasterEggChance == 1) {
+       console.log ("Easter Egg 1 Activated.");
        document.getElementById('desc1').innerHTML='Never';
        document.getElementById('desc2').innerHTML='Gonna';
        document.getElementById('desc3').innerHTML='Give';
