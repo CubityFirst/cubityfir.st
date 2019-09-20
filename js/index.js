@@ -11,6 +11,44 @@ function switchVisible() {
             }
 }
 
+//=================
+//    Easter Eggs
+//=================
+function NGGYU() {
+    var EasterEggChance = Math.floor((Math.random() * 100) + 1);
+    //console.log ("Easter Egg: " + EasterEggChance);
+    if (EasterEggChance == 1) {
+        var EasterEgg = Math.floor((Math.random() * 3) + 1);
+        if (EasterEgg == 1) {
+            console.log("Easter Egg 1 Activated.");
+            document.getElementById('desc1').innerHTML = 'Never';
+            document.getElementById('desc2').innerHTML = 'Gonna';
+            document.getElementById('desc3').innerHTML = 'Give';
+            document.getElementById('desc4').innerHTML = '<br>You';
+            document.getElementById('desc5').innerHTML = 'Up';
+            setTimeout(function(){
+                window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            }, 30000);
+        }
+        else if (EasterEgg == 2 ) {
+            console.log("Easter Egg 2 Activated.");
+            document.getElementById('desc1').innerHTML = 'K';
+            document.getElementById('desc2').innerHTML = 'A';
+            document.getElementById('desc3').innerHTML = 'P';
+            document.getElementById('desc4').innerHTML = 'P';
+            document.getElementById('desc5').innerHTML = 'A';
+        }
+        else if (EasterEgg == 3 ) {
+            console.log("Easter Egg 3 Activated.");
+            document.getElementById('desc1').innerHTML = "Don't";
+            document.getElementById('desc2').innerHTML = 'Do';
+            document.getElementById('desc3').innerHTML = 'Bad';
+            document.getElementById('desc4').innerHTML = 'Things';
+            document.getElementById('desc5').innerHTML = '<br>- Talon';
+        }
+    }
+}
+
 /**
  * requestAnimationFrame
  */
@@ -500,29 +538,4 @@ Particle.prototype = (function(o) {
     loop();
 
 })();
-//=================
-//    Easter Eggs
-//=================
-function NGGYU() {
-    var EasterEggChance = Math.floor((Math.random() * 100) + 1);
-    //console.log ("Easter Egg: " + EasterEggChance);
-    if (EasterEggChance == 1) {
-        var EasterEgg = Math.floor((Math.random() * 2) + 1);
-        if (EasterEgg == 1) {
-            console.log("Easter Egg 1 Activated.");
-            document.getElementById('desc1').innerHTML = 'Never';
-            document.getElementById('desc2').innerHTML = 'Gonna';
-            document.getElementById('desc3').innerHTML = 'Give';
-            document.getElementById('desc4').innerHTML = '<br>You';
-            document.getElementById('desc5').innerHTML = 'Up';
-        }
-        else if (EasterEgg == 2 ) {
-            console.log("Easter Egg 2 Activated.");
-            document.getElementById('desc1').innerHTML = 'K';
-            document.getElementById('desc2').innerHTML = 'A';
-            document.getElementById('desc3').innerHTML = 'P';
-            document.getElementById('desc4').innerHTML = 'P';
-            document.getElementById('desc5').innerHTML = 'A';
-        }
-    }
-}
+
