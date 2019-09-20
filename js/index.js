@@ -14,7 +14,7 @@ function switchVisible() {
 //=================
 //    Easter Eggs
 //=================
-function NGGYU() {
+function EasterEgg() {
     var EasterEggChance = Math.floor((Math.random() * 100) + 1);
     //console.log ("Easter Egg: " + EasterEggChance);
     if (EasterEggChance == 1) {
