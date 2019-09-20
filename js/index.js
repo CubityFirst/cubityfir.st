@@ -11,6 +11,18 @@ function switchVisible() {
             }
 }
 
+function NGGYU() {
+   var EasterEggChance = Math.floor((Math.random() * 100) + 1);
+   console.log ("Easter Egg: " + EasterEggChance);
+   if (EasterEggChance == 1) {
+       document.getElementById('desc1').innerHTML='Never';
+       document.getElementById('desc2').innerHTML='Gonna';
+       document.getElementById('desc3').innerHTML='Give';
+       document.getElementById('desc4').innerHTML='<br>You';
+       document.getElementById('desc5').innerHTML='Up';
+   }
+}
+
 /**
  * requestAnimationFrame
  */
