@@ -136,7 +136,7 @@ svg {
   padding: 10px;
 }
 .clickable {pointer-events: none}
-.unclickable {pointer-events: auto}
+.unclickable {pointer-events: auto; user-select: none;}
 /*
 ==========================
 		ANIM
