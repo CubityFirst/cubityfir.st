@@ -36,11 +36,7 @@ document.addEventListener('keydown', function(e) {
 
   // compare the key with the required key
   if (key == requiredKey) {
-
-    // move to the next key in the konami code sequence
     konamiCodePosition++;
-
-    // if the last key is reached, activate cheats
     if (konamiCodePosition == konamiCode.length) {
       activateCheats();
       konamiCodePosition = 0;
@@ -52,13 +48,15 @@ document.addEventListener('keydown', function(e) {
 
 function activateCheats() {
 
-            document.getElementById('desc1').innerHTML = 'Never';
-            document.getElementById('desc2').innerHTML = 'Gonna';
-            document.getElementById('desc3').innerHTML = 'Give';
-            document.getElementById('desc4').innerHTML = '<br>You';
-            document.getElementById('desc5').innerHTML = 'Up';
+            document.getElementById('desc1').innerHTML = 'You';
+            document.getElementById('desc2').innerHTML = 'Found';
+            document.getElementById('desc3').innerHTML = 'The';
+            document.getElementById('desc4').innerHTML = 'Secret';
+            document.getElementById('desc5').innerHTML = 'Congratulations!';
 
-  alert("cheats activated");
+	setTimeout(function(){
+                window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            }, 10000);
 }
 
 //=================
