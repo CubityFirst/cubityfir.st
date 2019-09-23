@@ -11,19 +11,14 @@ function switchVisible() {
             }
 }
 
-var allowedKeys = {37: 'l',38: 'u',39: 'r',40: 'd',65: 'a',66: 'b',
-		  45: 'n',45: 'n',45: 'n',45: 'n',45: 'n',45: 'n',};
+var allowedKeys = {37: 'l',38: 'u',39: 'r',40: 'd',65: 'a',66: 'b'};
 var konamiCode = ['u', 'u', 'd', 'd', 'l', 'r', 'l', 'r', 'b', 'a'];
 var konamiCodeStatus = 0;
 
-// add keydown event listener
 document.addEventListener('keydown', function(e) {
-  // get the value of the key code from the key map
   var key = allowedKeys[e.keyCode];
-  // get the value of the required key from the konami code
   var requiredKey = konamiCode[konamiCodePosition];
 
-  // compare the key with the required key
   if (key == requiredKey) {
     konamiCodeStatus++;
     if (konamiCodeStatus == konamiCode.length) {
@@ -36,7 +31,6 @@ document.addEventListener('keydown', function(e) {
 });
 
 function activateCheats() {
-
             document.getElementById('desc1').innerHTML = 'You';
             document.getElementById('desc2').innerHTML = 'Found';
             document.getElementById('desc3').innerHTML = 'The';
@@ -45,7 +39,7 @@ function activateCheats() {
 
 	setTimeout(function(){
                 window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-            }, 10000);
+            }, 5000);
 }
 
 //=================
