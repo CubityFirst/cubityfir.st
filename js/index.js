@@ -36,8 +36,6 @@ function activateCheats() {
             document.getElementById('desc3').innerHTML = 'The';
             document.getElementById('desc4').innerHTML = 'Secret';
             document.getElementById('desc5').innerHTML = 'Congratulations!';
-		var audio = new Audio(./'OoTLS.mp3');
-		audio.play();
 	setTimeout(function(){
                 window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             }, 5000);
