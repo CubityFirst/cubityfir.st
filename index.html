@@ -15,35 +15,7 @@
 </head>
 
 <body onload="EasterEgg()">
-<script> var secret = "3838404037393739666513"; //Konami Code
-var input = "";
-var timer;
-var mode = false;
-  var showclassName =false;
 
-$(document).ready(function() {
-$('#flash').hide(); });
-
-$(document).keyup(function(e) {
-//alert(e.which);
-input += e.which;
-clearTimeout(timer);
-timer = setTimeout(function() { input = ""; }, 500);
-check_input(); });
-
-function check_input() {
-if(input == secret) {
-document.getElementById('desc1').innerHTML = 'You';
-            document.getElementById('desc2').innerHTML = 'Found';
-            document.getElementById('desc3').innerHTML = 'The';
-            document.getElementById('desc4').innerHTML = '<br>Secret';
-            document.getElementById('desc5').innerHTML = 'Congratulations';
-showclassName= true; }};
-
-$(document).ready(function() {
-setInterval(function() { $('#info').html('Keystroke: ' + input); }, 100); });
-  </script>
-  
 <canvas id="c"></canvas>
 <script src='js/kzymdn.js'></script>
 <script src="js/index.js"></script>
