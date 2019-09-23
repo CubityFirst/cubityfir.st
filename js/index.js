@@ -13,20 +13,20 @@ function switchVisible() {
 
 var allowedKeys = {37: 'l',38: 'u',39: 'r',40: 'd',65: 'a',66: 'b'};
 var konamiCode = ['u', 'u', 'd', 'd', 'l', 'r', 'l', 'r', 'b', 'a'];
-var konamiCodeStatus = 0;
+var konamiCodePosition = 0;
 
 document.addEventListener('keydown', function(e) {
   var key = allowedKeys[e.keyCode];
   var requiredKey = konamiCode[konamiCodePosition];
 
   if (key == requiredKey) {
-    konamiCodeStatus++;
-    if (konamiCodeStatus == konamiCode.length) {
+    konamiCodePosition++;
+    if (konamiCodePosition == konamiCode.length) {
       activateCheats();
-      konamiCodeStatus = 0;
+      konamiCodePosition = 0;
     }
   } else {
-    konamiCodeStatus = 0;
+    konamiCodePosition = 0;
   }
 });
 
