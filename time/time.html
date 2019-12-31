@@ -1,0 +1,131 @@
+<style>
+*{font-size:17px;font-family:"Lucida Console",Monaco,monospace;background:#000;color:#ebebeb}td{padding:10px}.r{color:#a00}.p{color:#a0a}.g{color:#0a0}
+</style>
+<table>
+	<tr>
+		<td class="r">Manager</td>
+		<td>"Jake"</td>
+		<td id="0"></td>
+		<td id="0w"></td>
+		<td id="0n"></td>
+	</tr>
+	<tr>
+		<td class="r">Admin</td>
+		<td>Cubity_First</td>
+		<td id="2"></td>
+		<td id="2w"></td>
+		<td id="2n"></td>
+	</tr>
+	<tr>
+		<td class="p">Mod</td>
+		<td>OceansTwelve</td>
+		<td id="1"></td>
+		<td id="1w"></td>
+		<td id="1n"></td>
+	</tr>
+	<tr>
+		<td class="p">Mod</td>
+		<td>Langley_Man</td>
+		<td id="3"></td>
+		<td id="3w"></td>
+		<td id="3n"></td>
+	</tr>
+	<tr>
+		<td class="p">Mod</td>
+		<td>19Baguettes</td>
+		<td id="4"></td>
+		<td id="4w"></td>
+		<td id="4n"></td>
+	</tr>
+	<tr>
+		<td class="p">Mod</td>
+		<td>Mitchka</td>
+		<td id="5"></td>
+		<td id="5w"></td>
+		<td id="5n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>wertacus</td>
+		<td id="6"></td>
+		<td id="6w"></td>
+		<td id="6n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>Chubby_Chancho</td>
+		<td id="7"></td>
+		<td id="7w"></td>
+		<td id="7n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>Elentric</td>
+		<td id="8"></td>
+		<td id="8w"></td>
+		<td id="8n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>Jerthebear23</td>
+		<td id="9"></td>
+		<td id="9w"></td>
+		<td id="9n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>Snikay</td>
+		<td id="10"></td>
+		<td id="10w"></td>
+		<td id="10n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>Redzuzu</td>
+		<td id="11"></td>
+		<td id="11w"></td>
+		<td id="11n"></td>
+	</tr>
+	<tr>
+		<td class="g">Helper</td>
+		<td>iYoni</td>
+		<td id="12"></td>
+		<td id="12w"></td>
+		<td id="12n"></td>
+	</tr>
+</table>
+<script>
+function y() {
+e = new Date;
+t = 60 * (60 * a + e.getTimezoneOffset()) * 1e3;
+d = new Date((new Date).getTime() + t);
+l = d.getHours();
+k = d.getMinutes();
+f = d.getSeconds();
+h = l > 12 ? l - 12 : l;
+l = l < 10 ? "0" + l : l;
+j = l >= 12 ? "PM" : "AM";
+h = h < 10 ? "0" + h : h;
+m = k < 10 ? "0" + k : k;
+s = f < 10 ? "0" + f : f;
+u = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+document.getElementById(x).innerHTML = h + ":" + m + ":" + s + " " + j; w = x + "w";
+document.getElementById(w).innerHTML = l + ":" + m + ":" + s; n = x + "n";
+document.getElementById(n).innerHTML = u[d.getDay()];
+}
+setInterval(function () {
+y(a = -8, x = "0");
+y(a =  1, x = "1");
+y(a =  0, x = "2");
+y(a = -8, x = "3");
+y(a = -5, x = "4");
+y(a = -6, x = "5");
+y(a = -8, x = "6");
+y(a = -8, x = "7");
+y(a =  1, x = "8");
+y(a = -7, x = "9");
+y(a =  1, x = "10");
+y(a = -5, x = "11");
+y(a = -5, x = "12");
+}, 500);
+</script>

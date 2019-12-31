@@ -6,7 +6,6 @@
 	<title>Type Here</title>
 	
 	<style type="text/css">
-		
 	@font-face { font-family: Whitney; font-weight: 400; src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff) format("woff") }
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td { background: transparent; border: 0; font-size: 100%; margin: 0; outline: 0; padding: 0; vertical-align: baseline; }
 		ol,ul { list-style: none; }
@@ -46,19 +45,19 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
 <script>
-function resizeBox() {
-    var windowWidth = $(window).width() - 85;
-    $('#content').css('width', windowWidth);
-}
-$(function() {
-  resizeBox();
-  $(window).resize(resizeBox);
-  $('#content').val(localStorage.content);
-  $('#content').live( "keyup", function() {
-    var content = $('#content').val();
-    localStorage.content = content;
-  });
-});
+    function resizeBox() {
+        var windowWidth = $(window).width() - 85;
+        $('#content').css('width', windowWidth);
+    }
+    $(function() {
+      resizeBox();
+      $(window).resize(resizeBox);
+      $('#content').val(localStorage.content);
+      $('#content').live( "keyup", function() {
+        var content = $('#content').val();
+        localStorage.content = content;
+      });
+    });
 </script>
 </body>
 </html>
