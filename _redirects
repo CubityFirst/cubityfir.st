@@ -23,16 +23,13 @@
   /bp https://backpack.tf/profiles/76561198107654171
   /backpack https://backpack.tf/profiles/76561198107654171
   /classifieds https://backpack.tf/classifieds?steamid=76561198107654171
-
+  # Bot TF2
+  /botbp https://backpack.tf/profiles/76561198175343023
+  /botbackpack https://backpack.tf/profiles/76561198175343023
+  /botclassifieds https://backpack.tf/classifieds?steamid=76561198175343023
+  
 # Gsuite
 /email https://mail.google.com/a/cubityfir.st
 /mail https://mail.google.com/a/cubityfir.st
 /drive https://drive.google.com/a/cubityfir.st
 /calender https://www.google.com/calendar/hosted/cubityfir.st
-
-# Minecraft
-/villagers https://docs.google.com/spreadsheets/d/17t5ZZYdqXEg0Vz3uvLCrUf953YNAgyU-V6_iBvR8rFA/edit?usp=sharing
- # Casino
- /casino https://syl.ninja/roulette/
- /gamble https://syl.ninja/roulette/
- /roulette https://syl.ninja/roulette/
