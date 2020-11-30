@@ -48,7 +48,7 @@ function EasterEgg() {
     var EasterEggChance = Math.floor((Math.random() * 100) + 1);
     //console.log ("Easter Egg: " + EasterEggChance);
     if (EasterEggChance == 1) {
-        var EasterEgg = Math.floor((Math.random() * 3) + 1);
+        var EasterEgg = Math.floor((Math.random() * 4) + 1);
         if (EasterEgg == 1) {
             console.log("Easter Egg 1 Activated.");
             document.getElementById('desc1').innerHTML = 'Never';
@@ -75,6 +75,16 @@ function EasterEgg() {
             document.getElementById('desc3').innerHTML = 'Bad';
             document.getElementById('desc4').innerHTML = 'Things';
             document.getElementById('desc5').innerHTML = '<br>- Talon';
+        }
+        else if (EasterEgg == 4 ) {
+            console.log("Easter Egg 3 Activated.");
+            document.getElementById('desc1').innerHTML = "|\\---/|<br>" +
+                "    | ,_, |<br>" +
+                "\"Nyah~~\"- Wise, 2020<br>";
+            document.getElementById('desc2').innerHTML = '';
+            document.getElementById('desc3').innerHTML = '';
+            document.getElementById('desc4').innerHTML = '';
+            document.getElementById('desc5').innerHTML = '';
         }
     }
 }
