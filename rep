@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reputation System Suggestion</title>
+    <meta property="og:title" content="Reputation Suggestion" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cubityfir.st/rep" />
+    <meta property="og:locale" content="en_US" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+            display: grid;
+            grid-template-rows: 1fr auto;
+
+            margin: 0 auto;
+            max-width: 672px;
+            line-height: 1.6;
+            font-size: 18px;
+            color: #222;
+            background-color: #FAFAFA;
+            padding: 0 10px;
+            font-family: "Open Sans";
+        }
+
+        @media screen and (min-width: 680px) {
+            main {
+                margin: 40px 0;
+            }
+        }
+
+        h1, h2 {
+            line-height: 1.2;
+        }
+
+        footer {
+            grid-row-start: 2;
+            grid-row-end: 3;
+            color: #888;
+            font-size: 15px;
+            padding-bottom: 15px;
+        }
+
+        a {
+            color: #07A;
+        }
+        a:visited {
+            color: #941352;
+        }
+        footer > a {
+            color: #888 !important;
+        }
+
+        blockquote {
+            background: #F9F9F9;
+            border-left: 10px solid #CCC;
+            margin: 1.5em 10px;
+            padding: 0.5em 10px;
+
+            font-family: monospace;
+        }
+        blockquote p {
+            display: inline;
+        }
+
+        @media screen and (min-width: 400px) {
+            blockquote {
+                display: table;
+            }
+            blockquote > * {
+                display: table-cell;
+            }
+            blockquote > .name {
+                padding-right: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Reputation System, and why it's broken.</h1>
+    <h3>I've turned this into a website, since it breaches the 2000 character limit on discord.</h3>
+    <p>
+        Every now and then, in the Discord, people get rep, either for crafting, transferring profiles or similar.
+        There has been some controversy around this as of late, due to the very confusing way that this is handled.
+
+        For a long time I've been taking rep for Buying / Selling Mathmatical Hoe Blueprints, Basket of Seeds and much <em>much</em> more.
+        Others however, take reps from crafting for others, taking time out of their day to help them out by using their large number of unlocked collections to craft something quick and easy.
+    </p>
+    <p>
+        In other games, such as TF2, CS:GO or other games with a cash-market. Rep is used to signify risky / trades in which it's entirely one-sided for atleast one part of the transaction, you can see my <a href="https://backpack.tf/trust/76561198107654171">trust page</a> on backpack.tf for an example.
+    </p>
+    <p>
+        One of the *requirements* for giving out rep, is that it actually involves a "risky trade", not just spending a moment of your day helping them. If anything, doing risky trades is more than "just helping someone".
+    </p>
+    <blockquote>
+        <span class="name">[HELPER] Wild:</span>
+        <p class="message">
+            Buying/ selling items is not counted  as a rep
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">CubityFirst:</span>
+        <p class="message">
+            Even if they're risky trades?
+            Involving backpacks and the like?
+            If anything that should be what rep is for
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">[HELPER] Wild:</span>
+        <p class="message">
+            we have middle mans for them
+        </p>
+    </blockquote>
+    <p>
+        I'd argue that for most trades, rep is not valid and <em>should not be given out.</em> However, for Farming Items such as the Mathmatical Hoe, or Basket of Seeds.
+        There is no way to trade these inside of the menu outside of using backpacks, which have no way to look inside, outside of mods.
+        A common scam is to replace to blueprint with a regular wooden hoe, and hope that people fall for it.
+
+        Also, for the first time, we've heard about this magical "middle-man" service that the discord offers, which to my knowledge, literally noone knows <em>ANYTHING</em> about. <a href="https://i.cubityfir.st/QeYVN6NNmC">(or even shown in your faq)</a>
+    </p>
+    <p>
+        Crafting items for people, in the same vein as trading farming items, means that during one part of the trade, you hold <em>ALL the cards</em> in your hand at once, potentially running from the other person.
+        If we redescribe "selling mathmatical hoe blueprint" as "crafting mathmatical hoe blueprint", where instead of materials, it needs coins + tickets, would this be acceptable?
+    </p>
+    <p>
+        I knew there were plenty of other reps, that apparently broke these rules, so I started to very quickly collate a list, which you can find <a href="https://i.cubityfir.st/BadRepsApparently.txt">*here*</a>.
+    </p>
+    <p>
+        Knowing that posting a large number of links would likely auto-mute me, through whatever bot that you have. I brought this up, Wild refused to click the link with all the bad-reps inside, so I started to just post the links in chat, telling him that maybe he should go deal with those.
+    </p>
+    <blockquote>
+        <span class="name">CubityFirst:</span>
+        <p class="message">
+            since I bet this mutes me
+            https://cubity.getsharex.com/BadRepsApparently.txt
+            <br>
+            there we go
+            click that
+            go fucking wild dude
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">[HELPER] Wild:</span>
+        <p class="message">
+            um just dm me it I dont click on links sorry
+        </p>
+    </blockquote>
+    <p>
+        ..which is kinda meh? I respect people not clicking on links, but come on? Instead of solving this issue, or deleting the messages, he muted me instead.
+        Rep seems like a bit of a problem, one that wouldn't even be all that hard to solve.
+    </p>
+    <p>
+        My solution, and suggestion, is either remove reps entirely (if you don't wish to change them) since they have little to no meaning other than extending your e-peen, reatribute, redescribe or redefine what they mean,
+        to exclusively involve being nice to people, which is what Wild suggested they were really meant for, or open them up to risky trades such as crafting, selling things through risky manners, or other stuff like essence.
+    </p>
+    <p>
+        Now that I mention essence... that leads me on to.
+    </p>
+    <p>
+        Your own mods, who I've been told by your own developer, <a href="https://cubity.getsharex.com/RD3xZDT3ad">Myzumi</a>
+        that both Duzza, and Rothec manage the reps, and what do I know, scrolling up the "Essence" search inside of the plus-reps section, you have your own mod,
+        the one who apparently handles moderating reps, <a href="https://cubity.getsharex.com/CuenbPncFF">giving out a rep</a>, for something that you claim is against the rules.
+    </p>
+    <blockquote>
+        <span class="name">[HELPER] Wild:</span>
+        <p class="message">
+            Like I said I dont control what they dude.
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">Astryll:</span>
+        <p class="message">
+            Then do something about it
+            He's bringing this to you because he feels it's unfair
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">[HELPER] Wild:</span>
+        <p class="message">
+            #💡discord-suggestions
+        </p>
+    </blockquote>
+    <blockquote>
+        <span class="name">Astryll:</span>
+        <p class="message">
+            @឵឵ CubityFirst ឵឵ go wild
+        </p>
+    </blockquote>
+
+    <p>
+        As he so elequonty put it, Discord Suggestions. This is my suggestion, please for the love of god, Fix Rep.
+    </p>
+
+    <p>
+        This whole scenario is a mess, rep should honestly just be removed, or opened up to include more things.
+    </p>
+</main>
+<footer>
+    Format mostly stolen shamelessly from <a href="https://cubityfir.st/dontasktoask">cubityfir.st/dontasktoask</a>
+</footer>
+</body>
+</html>
