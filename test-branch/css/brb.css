@@ -1,0 +1,65 @@
+html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        body {
+            font-family: "Lato";
+            background: radial-gradient(at top, #353B44 -10%, #252932 60%);
+            color: #ffffff;
+            -moz-font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            text-align: center;
+            height: 100%;
+        }
+         .container h1 {
+            margin: 0;
+            font-size: 300px;
+            letter-spacing: 0.05em;
+            position: relative;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        .return {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            font-size: 44px;
+            font-weight: 300;
+            position: absolute;
+            width: 100%;
+            bottom: 30px;
+        }
+        .return a {
+            padding-bottom: 1px;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+            -webkit-transition: border-color 0.1s ease-in;
+            transition: border-color 0.1s ease-in;
+        }
+
+        .return a:hover {
+            border-bottom-color: #fff;
+        }
+        @media (max-width: 767px) {
+            .container {
+                position: relative;
+                top: 50%;
+                height: initial;
+                -webkit-transform: translateY(-50%);
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+            .container h1 {
+                font-size: 180px;
+            }
+            .return {
+                font-size: 18px;
+            }
+        }
