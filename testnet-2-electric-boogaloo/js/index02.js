@@ -236,7 +236,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    gravity:       0.1,
+    gravity:       0.2,
     isMouseOver:   false,
     dragging:      false,
     destroyed:     false,
