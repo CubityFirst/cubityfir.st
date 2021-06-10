@@ -18,7 +18,6 @@ var konamiCodePosition = 0;
 document.addEventListener('keydown', function(e) {
   var key = allowedKeys[e.keyCode];
   var requiredKey = konamiCode[konamiCodePosition];
-
   if (key == requiredKey) {
     konamiCodePosition++;
     if (konamiCodePosition == konamiCode.length) {
@@ -41,9 +40,8 @@ function activateCheats() {
             }, 5000);
 }
 
-//=================
-//    Easter Eggs
-//=================
+
+// Easter Eggs
 function EasterEgg() {
     var EasterEggChance = Math.floor((Math.random() * 100) + 1);
     //console.log ("Easter Egg: " + EasterEggChance);
@@ -387,14 +385,10 @@ Particle.prototype = (function(o) {
 
 });
 
-
-
 // Initialize
-
 (function() {
 
     // Configs
-
     var BACKGROUND_COLOR      = 'rgba(54, 57, 63, 1)',
         PARTICLE_RADIUS       = 1,
         G_POINT_RADIUS        = 10,
@@ -402,7 +396,6 @@ Particle.prototype = (function(o) {
 
 
     // Vars
-
     var canvas, context,
         bufferCvs, bufferCtx,
         screenWidth, screenHeight,
@@ -414,7 +407,6 @@ Particle.prototype = (function(o) {
 
 
     // Event Listeners
-
     function resize(e) {
         screenWidth  = canvas.width  = window.innerWidth;
         screenHeight = canvas.height = window.innerHeight;
@@ -479,7 +471,6 @@ Particle.prototype = (function(o) {
 
 
     // Functions
-
     function addParticle(num) {
         var i, p;
         for (i = 0; i < num; i++) {
@@ -502,14 +493,12 @@ Particle.prototype = (function(o) {
 
 
     // GUI Control
-
     control = {
         particleNum: 400
     };
 
 
     // Init
-
     canvas  = document.getElementById('c');
     bufferCvs = document.createElement('canvas');
 
