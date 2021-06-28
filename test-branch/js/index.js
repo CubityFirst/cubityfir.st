@@ -236,7 +236,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    gravity:       0.05,
+    gravity:       0.1,
     isMouseOver:   false,
     dragging:      false,
     destroyed:     false,
@@ -494,7 +494,7 @@ Particle.prototype = (function(o) {
 
     // GUI Control
     control = {
-        particleNum: 10000
+        particleNum: 500
     };
 
 
