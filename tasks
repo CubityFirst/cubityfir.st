@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Redirect</title>
+    <script type="text/javascript">
+        window.location.href = "10.10.250.246:5678"
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
