@@ -63,3 +63,5 @@
 # Internal
 /miner http://10.10.250.246:5000
 /tasks http://10.10.250.246:5678
+/codes https://docs.google.com/spreadsheets/d/129E_cGzsbkdkrM6H3u4WbxVctKrOLV-Jq9ls7MXShms
+/books https://docs.google.com/spreadsheets/d/1dwdr6VEA9_0M4A8IKkJ69AX82Qhy_o4MpB0GEeVLPMY
