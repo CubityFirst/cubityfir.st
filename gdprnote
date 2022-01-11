@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+	<title>Type Here</title>
+	
+	<style type="text/css">
+	@font-face { font-family: Whitney; font-weight: 400; src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff) format("woff") }
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td { background: transparent; border: 0; font-size: 100%; margin: 0; outline: 0; padding: 0; vertical-align: baseline; }
+		ol,ul { list-style: none; }
+		blockquote,q { quotes: none; }
+		blockquote:before,blockquote:after,q:before,q:after { content: none; }
+		:focus { outline: 0; }
+		del { text-decoration: line-through; }
+		table { border-collapse: collapse; border-spacing: 0; }
+		
+		body {font-family: Whitney!important; font-weight: 400; font-size: 1.8em;}
+		body, html {
+		  height: 100%;
+		  width: 100%;
+		  overflow: hidden;
+		  background-color: #333641;
+		}
+		
+		textarea#content {
+		  float: left;
+		  width: 95%;
+		  height: 95%;
+		  font-size: 1em;
+		  resize: none;
+		  padding: 40px;
+		  line-height: 1.3em;
+		  border: none;
+		  margin: 0;
+		  background-color: #333641;
+		  color: white;
+		}
+		
+	</style>
+</head>
+<body>
+
+  <textarea type="text" id="content" placeholder="Start typing. Simple as that." autofocus="true"></textarea>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+<script>
+    function resizeBox() {
+        var windowWidth = $(window).width() - 85;
+        $('#content').css('width', windowWidth);
+    }
+    $(function() {
+      resizeBox();
+      $(window).resize(resizeBox);
+      });
+    });
+</script>
+</body>
+</html>
