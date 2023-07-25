@@ -43,7 +43,7 @@ function activateCheats() {
 
 // Easter Eggs
 function EasterEgg() {
-    var EasterEggChance = Math.floor((Math.random() * 100) + 1);
+    var EasterEggChance = Math.floor((Math.random() * 33) + 1);
     //console.log ("Easter Egg: " + EasterEggChance);
     if (EasterEggChance == 1) {
         var EasterEgg = Math.floor((Math.random() * 4) + 1);
