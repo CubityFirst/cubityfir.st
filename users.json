@@ -1,0 +1,57 @@
+{
+  "Cubity": {
+    "token": "@K8e#Zp&@U@#9DTYbRR@xG3pDc8HcKw3y#kWNxnGnA8xvqX@!G9NPSBC&Rm*nUoB",
+    "role": "admin",
+    "originalCase": "Cubity"
+  },
+  "Lewis": {
+    "token": "ChatID-Eagle-Flame-Winter-River",
+    "role": "friend",
+    "originalCase": "Lewis"
+  },
+  "neppkun": {
+    "token": "ChatID-Oscar-Charlie-Hotel-Hotel",
+    "role": "friend",
+    "originalCase": "neppkun"
+  },
+  "Squidiums": {
+    "token": "ChatID-Uniform-Kilo-Foxtrot-Hotel",
+    "role": "squid",
+    "originalCase": "Squidiums"
+  },
+  "DaveMirra": {
+    "token": "ChatID-Sierra-Charlie-Foxtrot-Charlie",
+    "role": "friend",
+    "originalCase": "DaveMirra"
+  },
+  "Xenthys": {
+    "token": "ChatID-Papa-Lima-Yankee-India",
+    "role": "moderator",
+    "originalCase": "Xenthys"
+  },
+  "Mister_Fix": {
+    "token": "ChatID-Oscar-Sierra-Sierra-Whiskey",
+    "role": "moderator",
+    "originalCase": "Mister_Fix"
+  },
+  "Test": {
+    "token": "snowfield-degree-aggregate-uncivil-clinking-marauding",
+    "role": "user",
+    "originalCase": "Test"
+  },
+  "Give": {
+    "token": "gnat-babble-unkind-engaging-scorer-massager",
+    "role": "user",
+    "originalCase": "Give"
+  },
+  "GiveItToThirdLine": {
+    "token": "stinger-feline-untrue-clad-submersed-unpeeled",
+    "role": "friend",
+    "originalCase": "GiveItToThirdLine"
+  },
+  "test9": {
+    "token": "decency-oil-evidence-wafer-crayfish-hunter",
+    "role": "user",
+    "originalCase": "test9"
+  }
+}

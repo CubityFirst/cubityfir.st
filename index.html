@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="app-version" content="1.0.7">
+    <title>Cubity Chat</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="chat-container">
+        <header id="chat-header">
+            <div class="user-inputs">
+    <input type="text" id="name-input" placeholder="Enter your name..." value="Anonymous" maxlength="33">
+    <input type="password" id="token-input" placeholder="Identity Token (optional)">
+</div>
+        </header>
+
+        <ul id="messages"></ul>
+
+        <form id="form" action="">
+            <textarea id="input" placeholder="Type a message... (Shift + Enter for new line)" rows="1"></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/client.js"></script>
+
+    <div id="welcome-modal-backdrop" class="hidden">
+        <div id="welcome-modal">
+            <h2>Welcome to Cubity's Chat</h2>
+            <p>By default, your username is "Anonymous" and we don't know who you are!</p>
+            <p>If you want a fancy username, please use the command <code>!register YOURNAME</code> in the chat.</p>
+            <button id="dismiss-welcome">Dismiss</button>
+        </div>
+    </div>
+</body>
+</html>

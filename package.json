@@ -1,0 +1,14 @@
+{
+  "name": "node-chat-app",
+  "version": "1.0.1",
+  "description": "A sleek, modern chat application with moderation tools.",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js --ignore users.json"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.5"
+  },
+  "author": "CubityFirst w/ Assist from Google Gemini",
+  "license": "MIT"
+}

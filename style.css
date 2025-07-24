@@ -1,0 +1,215 @@
+/* General Body & Font Styling */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #1a1a1d;
+    color: #f0f0f0;
+}
+
+/* Main Chat Container */
+#chat-container {
+    background: #2c2c34;
+    width: 100%;
+    height: 100vh; /* Fallback for older browsers */
+    height: 100dvh; /* Modern unit that respects mobile browser UI */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Chat Header */
+#chat-header {
+    padding: 0.5rem 1rem;
+    background: #1f1f23;
+    border-bottom: 1px solid #444;
+}
+
+.user-inputs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#name-input, #token-input {
+    background: #4a4a52;
+    border: 1px solid #666;
+    border-radius: 6px;
+    color: #f0f0f0;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+#name-input:focus, #token-input:focus {
+    outline: none;
+    border-color: #6d28d9;
+}
+
+/* Message List */
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 1rem;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#messages > li {
+    padding: 0.5rem 0.2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    word-wrap: anywhere;
+}
+
+#messages > li:not(:last-child) {
+    border-bottom: 1px solid #3a3a42;
+}
+
+.timestamp {
+    font-size: 0.75rem;
+    color: #888;
+    flex-shrink: 0;
+}
+
+.badge {
+    color: #facc15; /* Star color (default) */
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.badge.wrench {
+    color: #60a5fa; /* A nice blue */
+}
+
+.badge.cog {
+    color: #9a9a9a; /* A neutral grey */
+}
+
+.badge.squid {
+    color: #34d399; /* An emerald/teal color */
+}
+
+.name {
+    font-weight: bold;
+    color: #a7a7a7;
+    flex-shrink: 0;
+}
+
+.name::after {
+    content: ':';
+}
+
+.message-text {
+    color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.message-text a, .message-text a:visited {
+    color: #a2c2f2; /* Pastel blue for unvisited links */
+    text-decoration: underline;
+    text-decoration-color: #a2c2f280; /* Faint underline */
+    transition: all 0.2s ease-in-out;
+}
+
+.message-text a:visited {
+    color: #c58af9; /* Pastel purple for visited links */
+    text-decoration-color: #c58af980; /* Faint underline */
+}
+
+.message-text a:hover {
+    color: #bddefd; /* Slightly brighter blue on hover */
+    text-decoration-color: #bddefd;
+}
+
+.emote {
+    height: 1.75rem;
+    vertical-align: middle;
+    margin: 0 0.1rem;
+}
+
+.delete-icon, .undo-icon {
+    margin-left: auto;
+    padding-left: 1rem;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s;
+}
+
+.delete-icon:hover {
+    color: #ef4444;
+}
+
+.undo-icon:hover {
+    color: #22c55e;
+}
+
+li.verified.system-message .message-text {
+    font-style: italic;
+    color: #a78bfa;
+}
+
+li.warning-message .message-text {
+    color: #ef4444; /* Bright Red */
+    font-weight: bold;
+}
+
+li.deleted-mod-view {
+    opacity: 0.6;
+}
+
+li.deleted-mod-view > * {
+    text-decoration: line-through;
+    color: #6c757d !important;
+}
+
+/* Message Input Form */
+#form {
+    background: #1f1f23;
+    padding: 0.5rem 1rem;
+    display: flex;
+    border-top: 1px solid #444;
+    align-items: flex-end;
+}
+
+#input {
+    border: 1px solid #444;
+    background-color: #2c2c34;
+    padding: 0.8rem;
+    flex-grow: 1;
+    border-radius: 8px;
+    margin-right: 0.5rem;
+    color: #f0f0f0;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: none;
+    overflow-y: auto;
+    max-height: 150px;
+    box-sizing: border-box;
+    height: 54px;
+}
+
+#input:focus {
+    outline: none;
+}
+
+#form > button {
+    background: #6d28d9;
+    border: none;
+    padding: 0 1.5rem;
+    height: 54px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out;
+    flex-shrink: 0;
+}
+
+#form > button:hover {
+    background: #5b21b6;
+}
