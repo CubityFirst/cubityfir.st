@@ -42,18 +42,13 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 <body>
 
   <textarea type="text" id="content" placeholder="Start typing. Simple as that." autofocus="true"></textarea>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-
 <script>
     function resizeBox() {
-        var windowWidth = $(window).width() - 85;
-        $('#content').css('width', windowWidth);
+        var windowWidth = document.documentElement.clientWidth - 85;
+        document.getElementById('content').style.width = windowWidth + 'px';
     }
-    $(function() {
-      resizeBox();
-      $(window).resize(resizeBox);
-      });
-    });
+    resizeBox();
+    window.addEventListener('resize', resizeBox);
 </script>
 </body>
 </html>

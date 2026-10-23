@@ -1,41 +1,24 @@
 //I'm so sorry any of this has to be done the way it was.
-$.fn.extend({
-    animateCss: function (animationName, callback) {
-        var animationEnd = (function (el) {
-            var animations = {
-                animation: 'animationend',
-                OAnimation: 'oAnimationEnd',
-                MozAnimation: 'mozAnimationEnd',
-                WebkitAnimation: 'webkitAnimationEnd',
-            };
+function animateCss(el, animationName, callback) {
+    el.classList.add('animated', animationName);
+    el.addEventListener('animationend', function () {
+        el.classList.remove('animated', animationName);
+        if (typeof callback === 'function') callback();
+    }, { once: true });
+}
 
-            for (var t in animations) {
-                if (el.style[t] !== undefined) {
-                    return animations[t];}}})
-        (document.createElement('div'));
-        this.addClass('animated ' + animationName).one(animationEnd, function () {
-            $(this).removeClass('animated ' + animationName);
-            if (typeof callback === 'function') callback();
-        });
-        return this;
-    },
-});
+function changeColor(color) {
+    document.getElementById("hideMe").style.color = '#fff';
+}
 
-$(document).ready(function () {
-    var infoDiv = $('.infoDiv');
+function hide() {
+    document.querySelector('.infoDiv').textContent = '󠀡';
+    document.getElementById("hideMe").style.color = '#242424';
+}
 
-    changeColor = function (color) {
-        document.getElementById("hideMe").style.color = '#fff';
-    }
-
-    hide = function () {
-        infoDiv.text('󠀡');
-        document.getElementById("hideMe").style.color = '#242424';
-    }
-
-    showText = function (LocalText) {
-        infoDiv.animateCss('tada');
-        infoDiv.text(LocalText);
-        changeColor();
-    }
-});
+function showText(LocalText) {
+    var infoDiv = document.querySelector('.infoDiv');
+    animateCss(infoDiv, 'tada');
+    infoDiv.textContent = LocalText;
+    changeColor();
+}
