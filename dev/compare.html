@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gravity: original vs rewrite</title>
+<!--
+  Side-by-side test bench for the gravity background. Not deployed (lives outside public/).
+  Serve the repo root, e.g. `python -m http.server 8000`, then open
+  http://localhost:8000/dev/compare.html   (?mode=free  ?rate=30  ?seed=42  ?demo)
+-->
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: #1e1f22; color: #dcddde; font: 13px/1.4 ui-monospace, "Roboto Mono", Consolas, monospace; display: flex; flex-direction: column; }
+  header { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #2b2d31; }
+  header label { display: flex; gap: 6px; align-items: center; }
+  input, select, button { font: inherit; color: inherit; background: #2b2d31; border: 1px solid #3f4147; border-radius: 4px; padding: 3px 8px; }
+  button { cursor: pointer; }
+  button:hover:not(:disabled) { background: #35373c; }
+  button:disabled { opacity: .4; cursor: default; }
+  #seed { width: 7em; }
+  #status { margin-left: auto; }
+  .ok { color: #95c76f; }
+  .bad { color: #dc3b3b; }
+  .dim { color: #949ba4; }
+  main { flex: 1; display: flex; gap: 8px; padding: 8px; min-height: 0; }
+  .pane { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .pane h2 { margin: 0 0 6px; font-size: 13px; font-weight: normal; color: #949ba4; }
+  .stage { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+  iframe { position: absolute; top: 0; left: 0; border: 0; display: block; }
+  .ghost { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 50%; pointer-events: none; display: none; z-index: 1; }
+  footer { padding: 0 14px 10px; color: #949ba4; }
+  @media (max-width: 700px) { main { flex-direction: column; } }
+</style>
+</head>
+<body>
+<header>
+  <label>Mode
+    <select id="mode">
+      <option value="lockstep">Lockstep (shared clock, 1×)</option>
+      <option value="free">Real timing (own clocks, native DPR)</option>
+    </select>
+  </label>
+  <label>Rewrite tick rate
+    <select id="rate">
+      <option value="">as shipped</option>
+      <option value="0">0 (one per frame)</option>
+      <option value="20">20/s</option>
+      <option value="30">30/s</option>
+      <option value="60">60/s</option>
+      <option value="120">120/s</option>
+      <option value="165">165/s</option>
+      <option value="240">240/s</option>
+    </select>
+  </label>
+  <label>Seed <input id="seed" type="number" step="1"></label>
+  <button id="restart">Restart</button>
+  <button id="pause">Pause</button>
+  <button id="step">Step</button>
+  <button id="demo">Demo</button>
+  <span id="status" class="dim">loading…</span>
+</header>
+<main>
+  <div class="pane"><h2>original: dev/original-gravity.js (bb216743)</h2><div class="stage"><div class="ghost"></div></div></div>
+  <div class="pane"><h2>rewrite: public/js/gravity.js</h2><div class="stage"><div class="ghost"></div></div></div>
+</main>
+<footer>
+  Click, drag or double-click in either pane; the input is mirrored to the other (the ring marks the mirrored cursor).
+  Lockstep feeds both one tick per display frame from the same random seed at 1× pixel ratio, so they should stay
+  pixel-identical, so lockstep forces the rewrite's tick rate to 0 (one tick per frame, no blending).
+  Real timing runs each on its own clock at native pixel ratio, as on the live site, with the rewrite at the chosen
+  tick rate. Low rates (20–30/s) make the blending between ticks easy to see.
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var TICK = 1000 / 60,
+      EVENTS = ['mousemove', 'mousedown', 'mouseup', 'dblclick'],
+      DIFF_EVERY = 10,     // steps between pixel comparisons
+      DIFF_TOLERANCE = 2;  // per-channel slack for antialiasing noise
+
+  var params = new URLSearchParams(location.search),
+      $ = function (id) { return document.getElementById(id); };
+
+  var state = {
+    lockstep: params.get('mode') !== 'free',
+    seed: parseInt(params.get('seed'), 10) || 1234,
+    rate: params.get('rate') || '',
+    paused: false,
+    ready: false,
+    steps: 0,
+    newClock: 0,
+    diff: null,          // { pct, at }
+    firstDiverged: null,
+    demo: null           // { start }
+  };
+
+  var stages = document.querySelectorAll('.stage'),
+      panes = [
+        { src: 'original-gravity.js', stage: stages[0] },
+        { src: '../public/js/gravity.js', stage: stages[1], rewrite: true }
+      ];
+  panes.forEach(function (p) { p.ghost = p.stage.querySelector('.ghost'); });
+
+
+  /**
+   * Pane documents. A prelude seeds Math.random and, in lockstep, swaps
+   * requestAnimationFrame for a hook the bench drives, before the sim script loads.
+   */
+  function srcdoc(p, code) {
+    var prelude =
+      '(function(){' +
+      'var a=' + (state.seed >>> 0) + ';' +
+      'Math.random=function(){a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};' +
+      (state.lockstep
+        ? 'try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1;},configurable:true});}catch(e){window.devicePixelRatio=1;}' +
+          'window.requestAnimationFrame=function(cb){window.__pending=cb;return 0;};'
+        : '') +
+      '})();';
+    return '<!doctype html><html><head><meta charset="utf-8"><style>' +
+      'html,body{margin:0;height:100%;overflow:hidden;background:#36393f}' +
+      'canvas{position:absolute;top:0;left:0;width:100%;height:100%}' +
+      '</style></head><body><canvas id="c"></canvas>' +
+      '<script>' + prelude + '<\/script>' +
+      (code
+        ? '<script>' + code.replace(/<\/script/gi, '<\/script') + '<\/script>'
+        : '<script src="' + new URL(p.src, location.href).href + '"><\/script>') +
+      '</body></html>';
+  }
+
+  function sizePanes() {
+    // Both panes get the same whole-pixel size so coordinates and pixels line up
+    var w = Infinity, h = Infinity;
+    panes.forEach(function (p) {
+      w = Math.min(w, Math.floor(p.stage.clientWidth));
+      h = Math.min(h, Math.floor(p.stage.clientHeight));
+    });
+    panes.forEach(function (p) {
+      if (!p.frame) return;
+      p.frame.style.width = w + 'px';
+      p.frame.style.height = h + 'px';
+    });
+  }
+
+  // The rewrite is loaded as text so its TICK_RATE can be overridden
+  function rewriteSource() {
+    var rate = state.lockstep ? '0' : state.rate;
+    return fetch(new URL(panes[1].src, location.href), { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (code) {
+        return rate === '' ? code : code.replace(/(TICK_RATE\s*=\s*)\d+,/, '$1' + rate + ',');
+      });
+  }
+
+  var generation = 0;
+  function start() {
+    var gen = ++generation;
+    state.ready = false;
+    state.steps = 0;
+    state.newClock = 0;
+    state.diff = null;
+    state.firstDiverged = null;
+    state.demo = null;
+    state.paused = false;
+
+    var q = new URLSearchParams();
+    if (!state.lockstep) q.set('mode', 'free');
+    if (state.rate !== '') q.set('rate', state.rate);
+    q.set('seed', state.seed);
+    history.replaceState(null, '', '?' + q);
+    $('mode').value = state.lockstep ? 'lockstep' : 'free';
+    $('rate').value = state.lockstep ? '0' : state.rate;
+    $('rate').disabled = state.lockstep;
+    $('seed').value = state.seed;
+    syncButtons();
+
+    panes.forEach(function (p) { if (p.frame) p.frame.remove(); p.frame = null; });
+
+    rewriteSource().then(function (code) {
+      if (gen !== generation) return;
+      var loads = panes.map(function (p) {
+        p.frame = document.createElement('iframe');
+        p.stage.appendChild(p.frame);
+        return new Promise(function (resolve) {
+          p.frame.addEventListener('load', function () { resolve(); }, { once: true });
+          p.frame.srcdoc = srcdoc(p, p.rewrite ? code : null);
+        });
+      });
+      sizePanes();
+      return Promise.all(loads);
+    }).then(function () {
+      if (gen !== generation) return;
+      panes.forEach(function (p, i) {
+        p.win = p.frame.contentWindow;
+        p.canvas = p.win.document.getElementById('c');
+        mirror(p, panes[1 - i]);
+      });
+      if (state.lockstep) {
+        // The original draws its first frame synchronously as it loads; give the rewrite
+        // the same head start so both sit at tick 1.
+        call(panes[1], state.newClock += TICK);
+      }
+      state.ready = true;
+      if (params.has('demo') || state.demoRequested) { state.demoRequested = false; runDemo(); }
+      render();
+    });
+  }
+
+
+  /**
+   * Input mirroring
+   */
+  function mirror(from, to) {
+    EVENTS.forEach(function (type) {
+      from.canvas.addEventListener(type, function (e) {
+        if (!e.isTrusted) return; // don't bounce mirrored events back
+        send(to, type, e.clientX, e.clientY, e);
+        showGhost(to, e.clientX, e.clientY);
+        from.ghost.style.display = 'none';
+      }, true);
+    });
+    from.canvas.addEventListener('mouseleave', function () { to.ghost.style.display = 'none'; });
+  }
+
+  function send(p, type, x, y, like) {
+    p.canvas.dispatchEvent(new p.win.MouseEvent(type, {
+      bubbles: true, cancelable: true, clientX: x, clientY: y,
+      button: like ? like.button : 0,
+      buttons: like ? like.buttons : (type === 'mousedown' ? 1 : 0),
+      detail: like ? like.detail : 1
+    }));
+  }
+
+  function showGhost(p, x, y) {
+    p.ghost.style.display = 'block';
+    p.ghost.style.left = x + 'px';
+    p.ghost.style.top = y + 'px';
+  }
+
+
+  /**
+   * Lockstep driver
+   */
+  function call(p, t) {
+    var cb = p.win.__pending;
+    p.win.__pending = null;
+    if (!cb) return;
+    try { cb(t); } catch (err) { console.error(err); }
+  }
+
+  function step() {
+    state.steps++;
+    if (state.demo) demoEvents(state.steps - state.demo.start);
+    call(panes[0], performance.now());
+    call(panes[1], state.newClock += TICK);
+    if (state.steps % DIFF_EVERY === 0) compare();
+  }
+
+  function compare() {
+    var a = panes[0].canvas, b = panes[1].canvas;
+    if (a.width !== b.width || a.height !== b.height) {
+      state.diff = { size: a.width + '×' + a.height + ' vs ' + b.width + '×' + b.height };
+      return;
+    }
+    var da = a.getContext('2d').getImageData(0, 0, a.width, a.height).data,
+        db = b.getContext('2d').getImageData(0, 0, b.width, b.height).data,
+        off = 0;
+    for (var i = 0; i < da.length; i += 4) {
+      if (Math.abs(da[i] - db[i]) > DIFF_TOLERANCE ||
+          Math.abs(da[i + 1] - db[i + 1]) > DIFF_TOLERANCE ||
+          Math.abs(da[i + 2] - db[i + 2]) > DIFF_TOLERANCE) off++;
+    }
+    state.diff = { pct: off / (da.length / 4) * 100, count: off };
+    if (off && state.firstDiverged === null) state.firstDiverged = state.steps;
+  }
+
+  function loop() {
+    requestAnimationFrame(loop);
+    if (state.ready && state.lockstep && !state.paused) step();
+    render();
+  }
+
+
+  /**
+   * Scripted demo: identical synthetic input to both panes, keyed to lockstep steps.
+   * Drops a handful of points, then a cluster that merges past the size limit, then
+   * double-clicks a fresh point to collapse it.
+   */
+  var DEMO = [];
+  (function () {
+    function at(step, fn) { (DEMO[step] = DEMO[step] || []).push(fn); }
+    function click(step, fx, fy) {
+      at(step, function (w, h) { fire('mousemove', fx * w, fy * h); fire('mousedown', fx * w, fy * h); fire('mouseup', fx * w, fy * h); });
+    }
+    click(5, 0.25, 0.35); click(35, 0.7, 0.55); click(70, 0.5, 0.2); click(110, 0.15, 0.8);
+    for (var i = 0; i < 14; i++) {
+      var a = i * 2.4, d = 0.04 + i * 0.012;
+      click(300 + i * 6, 0.5 + Math.cos(a) * d, 0.5 + Math.sin(a) * d * 1.6);
+    }
+    click(700, 0.85, 0.2);
+    at(702, function (w, h) { fire('mousemove', 0.85 * w, 0.2 * h); fire('dblclick', 0.85 * w, 0.2 * h); });
+  })();
+
+  function fire(type, x, y) { panes.forEach(function (p) { send(p, type, x, y); }); }
+
+  function demoEvents(k) {
+    var w = panes[0].canvas.clientWidth, h = panes[0].canvas.clientHeight;
+    (DEMO[k] || []).forEach(function (fn) { fn(w, h); });
+  }
+
+  function runDemo() {
+    if (!state.lockstep) return;
+    if (state.steps > 0) { state.demoRequested = true; start(); return; } // demo from a clean start
+    state.demo = { start: state.steps };
+  }
+
+
+  /**
+   * UI
+   */
+  function syncButtons() {
+    $('pause').disabled = $('step').disabled = $('demo').disabled = !state.lockstep;
+    $('pause').textContent = state.paused ? 'Resume' : 'Pause';
+  }
+
+  function render() {
+    var s = $('status');
+    if (!state.ready) { s.className = 'dim'; s.textContent = 'loading…'; return; }
+    if (!state.lockstep) { s.className = 'dim'; s.textContent = 'real timing: no pixel diff (clocks differ)'; return; }
+    var d = state.diff, text = 'step ' + state.steps + (state.paused ? ' (paused)' : '') + ' · ';
+    if (!d) { s.className = 'dim'; s.textContent = text + 'comparing…'; return; }
+    if (d.size) { s.className = 'bad'; s.textContent = text + 'canvas size mismatch ' + d.size; return; }
+    if (!d.count && state.firstDiverged === null) {
+      s.className = 'ok';
+      s.textContent = text + 'pixel-identical';
+    } else {
+      s.className = 'bad';
+      s.textContent = text + d.count + ' px differ (' + d.pct.toFixed(3) + '%) · first diverged by step ' + state.firstDiverged;
+    }
+  }
+
+  $('mode').addEventListener('change', function () { state.lockstep = this.value === 'lockstep'; start(); });
+  $('rate').addEventListener('change', function () { state.rate = this.value; start(); });
+  $('seed').addEventListener('change', function () { state.seed = parseInt(this.value, 10) || 0; start(); });
+  $('restart').addEventListener('click', start);
+  $('pause').addEventListener('click', function () { state.paused = !state.paused; syncButtons(); });
+  $('step').addEventListener('click', function () {
+    state.paused = true; syncButtons();
+    if (state.ready) { step(); compare(); }
+  });
+  $('demo').addEventListener('click', runDemo);
+  window.addEventListener('resize', sizePanes);
+
+  start();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
