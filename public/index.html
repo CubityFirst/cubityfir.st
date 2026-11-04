@@ -6,6 +6,8 @@
   <meta charset="UTF-8">
   <title> | Landing Page</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/below.css">
+  <script>if (/[?&]bg=full(&|$)/.test(location.search)) document.documentElement.classList.add('bg-full');</script>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
   <!--Browser Theming for Chrome, Firefox, Opera + Windows Phone + iOS Safari-->
   <meta name="theme-color" content="#37383F">
@@ -14,9 +16,8 @@
 </head>
 
 <body onload="EasterEgg()">
+<section class="hero">
 <canvas id="c"></canvas>
-<script src="js/index.js"></script>
-<script src="js/gravity.js"></script>
 <div class="boxcontainer clickable">
   <div class="box clickable" id="box" style="display: block;">
     <h1 class="title unclickable" onclick="switchVisible()">cubityfirst</h1>
@@ -135,5 +136,70 @@
     </a>
   </div>
 </div>
+<a class="scroll-hint" href="#more" aria-label="Scroll down">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+</a>
+</section>
+
+<!-- Below the fold: prototypes, see css/below.css and js/below.js -->
+<section class="below reveal" id="more">
+  <span class="proto-tag">prototype A · projects</span>
+  <h2 class="sec-title"><span class="sec-path">~/</span>projects</h2>
+  <p class="sec-lede">things I&rsquo;ve been building lately, straight from GitHub.</p>
+  <div class="proj-grid" id="proj-grid">
+    <div class="proj skeleton"></div><div class="proj skeleton"></div><div class="proj skeleton"></div>
+    <div class="proj skeleton"></div><div class="proj skeleton"></div><div class="proj skeleton"></div>
+  </div>
+  <a class="proj-more" href="https://github.com/CubityFirst?tab=repositories" target="_blank" rel="noopener">all projects &rarr;</a>
+</section>
+
+<section class="below reveal" id="terminal">
+  <span class="proto-tag">prototype B · terminal (interactive faq)</span>
+  <div class="term">
+    <div class="term-bar"><i></i><i></i><i></i><span>cubity@cubityfir.st: ~</span></div>
+    <div class="term-body" id="term-body">
+      <div id="term-out" aria-live="polite">
+        <noscript>
+          <div class="line">developer; engineer; memer; sysadmin; and more</div>
+          <div class="line"><a href="mailto:cubity@cubityfir.st">cubity@cubityfir.st</a>  <a href="key">pgp-key</a>  <a href="keybase.txt">keybase.txt</a>  <a href="https://github.com/CubityFirst">github</a></div>
+        </noscript>
+      </div>
+      <form class="term-line" id="term-form" autocomplete="off" hidden>
+        <label for="term-input"><span class="p-user">cubity@cubityfir.st</span>:<span class="p-path">~</span>$&nbsp;</label>
+        <input id="term-input" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send"
+               aria-label="Type a command or a question">
+      </form>
+    </div>
+  </div>
+  <div class="term-chips" aria-label="Quick commands">
+    <button type="button" data-term-cmd="help">help</button>
+    <button type="button" data-term-cmd="faq">faq</button>
+    <button type="button" data-term-cmd="projects">projects</button>
+    <button type="button" data-term-cmd="contact">contact</button>
+    <button type="button" data-term-cmd="tail -n 10">activity</button>
+    <button type="button" data-term-cmd="clear">clear</button>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <span>&copy; cubityfirst &middot; made with too many particles</span>
+  <span class="foot-links">
+    <a href="mailto:cubity@cubityfir.st">email</a>
+    <a href="https://github.com/CubityFirst" target="_blank" rel="noopener">github</a>
+    <a href="https://bsky.app/profile/cubityfir.st" target="_blank" rel="noopener">bluesky</a>
+    <a href="#top" onclick="window.scrollTo({top: 0}); return false;">back to top &uarr;</a>
+  </span>
+</footer>
+
+<div class="proto-switch" role="group" aria-label="Prototype: background">
+  <span>bg</span>
+  <button type="button" data-bg="hero">hero only</button>
+  <button type="button" data-bg="full">all the way down</button>
+</div>
+
+<script src="js/index.js"></script>
+<script src="js/gravity.js"></script>
+<script src="js/below.js"></script>
+<script src="js/terminal.js"></script>
 </body>
 </html>

@@ -1,0 +1,452 @@
+/*
+==========================
+
+	BELOW THE FOLD (prototype)
+
+==========================
+*/
+
+.below {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 96px 16px;
+  text-align: left;
+  color: #b9bbbe;
+}
+
+.below + .below {
+  padding-top: 0;
+}
+
+/* Marks each block as a prototype while we decide what stays */
+.proto-tag {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 2px 8px;
+  border: 1px dashed #4f5157;
+  border-radius: 4px;
+  color: #6d6f75;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.sec-title {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: 700;
+  text-shadow: 0 0 6px #000, 0 0 14px #000;
+}
+
+.sec-title .sec-path {
+  color: #4087ED;
+}
+
+.sec-lede {
+  margin: -12px 0 24px;
+  color: #808080;
+  font-size: 0.9em;
+}
+
+/* Fade-up as each block scrolls into view */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.shown {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* ---------- A: projects ---------- */
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.proj {
+  display: flex;
+  flex-direction: column;
+  min-height: 132px;
+  padding: 16px;
+  border: 1px solid #3c3e44;
+  border-radius: 8px;
+  background: #292b2f;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.proj:hover {
+  border-color: #4087ED;
+  background: #2c2f35;
+  transform: translateY(-2px);
+}
+
+.proj-name {
+  color: #fff;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.proj-desc {
+  margin: 8px 0 14px;
+  color: #8e9096;
+  font-size: 0.82em;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.proj-desc.empty {
+  color: #5d5f65;
+  font-style: italic;
+}
+
+.proj-meta {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #6d6f75;
+  font-size: 0.75em;
+}
+
+.lang-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+.proj.skeleton {
+  border-style: dashed;
+  background: transparent;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.proj-more {
+  display: inline-block;
+  margin-top: 20px;
+  color: #808080;
+  font-size: 0.9em;
+  transition: color 0.2s ease;
+}
+
+.proj-more:hover {
+  color: #fff;
+}
+
+
+/* ---------- B: terminal ---------- */
+
+.term {
+  border: 1px solid #3c3e44;
+  border-radius: 8px;
+  background: #1e1f22;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #2c2e33;
+  background: #26282c;
+}
+
+.term-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3c3e44;
+}
+
+.term-bar span {
+  margin-left: 8px;
+  color: #6d6f75;
+  font-size: 0.75em;
+}
+
+.term-body {
+  height: 440px;
+  padding: 18px 18px 22px;
+  overflow-y: auto;
+  font-size: 0.85em;
+  line-height: 1.75;
+  cursor: text;
+  scrollbar-width: thin;
+  scrollbar-color: #3c3e44 transparent;
+}
+
+.term-body .line {
+  min-height: 1.75em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.term-body .p-user { color: #95c76f; }
+.term-body .p-path { color: #4087ED; }
+.term-body .p-cmd  { color: #fff; }
+.term-body .dim    { color: #6d6f75; }
+.term-body .err    { color: #dc3b3b; }
+.term-body .q      { color: #fff; font-weight: 700; }
+
+/* The hero's tagline colours */
+.term-body .w1 { color: #4087ED; }
+.term-body .w2 { color: #F9A532; }
+.term-body .w3 { color: #ac39ac; }
+.term-body .w4 { color: #dc3b3b; }
+.term-body .w5 { color: #00aba5; }
+
+.term-body a {
+  color: #F9A532;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.2s ease;
+}
+
+.term-body a:hover {
+  border-bottom-color: #F9A532;
+}
+
+/* Text that runs a command when clicked */
+.cmd-link {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dotted #00aba580;
+  background: none;
+  color: #00aba5;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cmd-link:hover,
+.cmd-link:focus-visible {
+  border-bottom-style: solid;
+  outline: none;
+}
+
+.cmd-link.dir {
+  color: #4087ED;
+  border-bottom-color: #4087ED80;
+}
+
+.term-line {
+  display: flex;
+  align-items: baseline;
+}
+
+.term-line[hidden] {
+  display: none;
+}
+
+.term-line label {
+  flex: none;
+  white-space: pre;
+}
+
+.term-line input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  caret-color: #b9bbbe;
+  font: inherit;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  vertical-align: -0.2em;
+  background: #b9bbbe;
+  animation: blink 1.1s steps(1) infinite;
+}
+
+.term-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.term-chips button {
+  padding: 6px 12px;
+  border: 1px solid #3c3e44;
+  border-radius: 999px;
+  background: #292b2f;
+  color: #b9bbbe;
+  font: inherit;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.term-chips button:hover,
+.term-chips button:focus-visible {
+  border-color: #4087ED;
+  color: #fff;
+  outline: none;
+}
+
+
+/* ---------- footer ---------- */
+
+.site-foot {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 16px 56px;
+  border-top: 1px solid #3a3c42;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #6d6f75;
+  font-size: 0.8em;
+}
+
+.site-foot a {
+  color: #808080;
+  transition: color 0.2s ease;
+}
+
+.site-foot a:hover {
+  color: #fff;
+}
+
+.site-foot .foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+
+/* ---------- shared ---------- */
+
+@keyframes blink {
+  50% {opacity: 0;}
+}
+
+@keyframes pulse {
+  0%, 100% {opacity: 0.35;}
+  50% {opacity: 0.7;}
+}
+
+@media (max-width: 520px) {
+  .below {padding: 64px 16px;}
+  .term-body {height: 60vh; font-size: 0.78em;}
+  .site-foot {flex-direction: column; align-items: flex-start;}
+}
+
+@media (pointer: coarse) {
+  .term-line input {font-size: 16px;}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {opacity: 1; transform: none; transition: none;}
+  .cursor, .proj.skeleton {animation: none;}
+  .proj:hover {transform: none;}
+}
+
+
+/*
+==========================
+
+	PROTOTYPE C: background all the way down
+
+	html.bg-full pins the canvas to the viewport so the field sits behind every
+	section. Sections let clicks through to the canvas except on things you can
+	interact with, so gravity points can be dropped anywhere on the page.
+
+==========================
+*/
+
+html.bg-full #c {
+  position: fixed;
+}
+
+html.bg-full .below,
+html.bg-full .site-foot {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+html.bg-full .below a,
+html.bg-full .below button,
+html.bg-full .proj,
+html.bg-full .term,
+html.bg-full .site-foot a {
+  pointer-events: auto;
+}
+
+html.bg-full .sec-lede,
+html.bg-full .proto-tag,
+html.bg-full .site-foot {
+  text-shadow: 0 0 6px #000, 0 0 14px #000;
+}
+
+/* Cards go slightly glassy so the field shows through without hurting legibility */
+html.bg-full .proj {
+  background: rgba(41, 43, 47, 0.82);
+  backdrop-filter: blur(3px);
+}
+
+html.bg-full .proj:hover {
+  background: rgba(44, 47, 53, 0.9);
+}
+
+html.bg-full .site-foot {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Prototype-only switch, bottom right */
+.proto-switch {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px dashed #4f5157;
+  border-radius: 999px;
+  background: rgba(30, 31, 34, 0.9);
+  font-size: 11px;
+}
+
+.proto-switch span {
+  padding: 0 6px 0 8px;
+  color: #6d6f75;
+}
+
+.proto-switch button {
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: #808080;
+  font: inherit;
+  cursor: pointer;
+}
+
+.proto-switch button[aria-pressed="true"] {
+  background: #3c3e44;
+  color: #fff;
+}

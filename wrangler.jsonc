@@ -12,5 +12,19 @@
     { "pattern": "cubityfir.st", "custom_domain": true },
     { "pattern": "michaelburr.co.uk", "custom_domain": true }
   ],
-  "previews": {}
+  "previews": {},
+  "env": {
+    // Test site: `npx wrangler deploy --env newsite` deploys a separate worker
+    // (cubityfirst-newsite) on newsite.cubityfir.st, leaving production untouched
+    "newsite": {
+      "workers_dev": false,
+      "assets": {
+        "directory": "public",
+        "not_found_handling": "404-page"
+      },
+      "routes": [
+        { "pattern": "newsite.cubityfir.st", "custom_domain": true }
+      ]
+    }
+  }
 }

@@ -42,6 +42,9 @@
         pointer = { x: -1e4, y: -1e4, vx: 0, vy: 0, inside: false },
         hovered = null,
         dragged = null,
+        pendingTap = null,                 // touch/pen press on empty space, awaiting pointerup
+        lastTap = { well: null, time: 0 }, // for double-tap detonation on touch
+        onScreen = true,
         vignette;
 
 
@@ -124,9 +127,14 @@
      * Sizing
      */
     function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        width = window.innerWidth;
-        height = window.innerHeight;
+        // Size from the canvas box (the hero section), not the window. Skip no-op resizes,
+        // e.g. mobile URL bar show/hide, since resetting the canvas wipes the trails.
+        var newDpr = Math.min(window.devicePixelRatio || 1, 2),
+            w = canvas.clientWidth, h = canvas.clientHeight;
+        if (w === width && h === height && newDpr === dpr) return;
+        dpr = newDpr;
+        width = w;
+        height = h;
         canvas.width = buf.width = Math.round(width * dpr);
         canvas.height = buf.height = Math.round(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -155,14 +163,21 @@
         canvas.style.cursor = dragged ? 'grabbing' : hovered ? 'grab' : 'crosshair';
     }
 
+    // Event position in canvas space (the canvas scrolls with the page)
+    function localPoint(e) {
+        var r = canvas.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+
     window.addEventListener('pointermove', function (e) {
+        var p = localPoint(e);
         if (pointer.inside) {
             // Smoothed pointer velocity, used for stirring and for flinging a dragged well
-            pointer.vx = pointer.vx * 0.5 + (e.clientX - pointer.x) * 0.5;
-            pointer.vy = pointer.vy * 0.5 + (e.clientY - pointer.y) * 0.5;
+            pointer.vx = pointer.vx * 0.5 + (p.x - pointer.x) * 0.5;
+            pointer.vy = pointer.vy * 0.5 + (p.y - pointer.y) * 0.5;
         }
-        pointer.x = e.clientX;
-        pointer.y = e.clientY;
+        pointer.x = p.x;
+        pointer.y = p.y;
         pointer.inside = true;
         if (!dragged) hovered = topWellAt(pointer.x, pointer.y);
         updateCursor();
@@ -173,10 +188,15 @@
         hovered = null;
     });
 
+    function dropWell(x, y) {
+        if (wells.length < MAX_WELLS) wells.push(new Well(x, y));
+    }
+
     canvas.addEventListener('pointerdown', function (e) {
         canvas.setPointerCapture(e.pointerId);
-        pointer.x = e.clientX;
-        pointer.y = e.clientY;
+        var p = localPoint(e);
+        pointer.x = p.x;
+        pointer.y = p.y;
         pointer.vx = pointer.vy = 0;
 
         var w = topWellAt(pointer.x, pointer.y);
@@ -184,11 +204,28 @@
             dragged = w;
             w.offX = w.x - pointer.x;
             w.offY = w.y - pointer.y;
-        } else if (wells.length < MAX_WELLS) {
-            wells.push(new Well(pointer.x, pointer.y));
+            if (e.pointerType !== 'mouse') {
+                // dblclick never fires here (touchstart is cancelled), so detect double-taps
+                var now = performance.now();
+                if (lastTap.well === w && now - lastTap.time < 350 && !w.dying) w.dying = 1;
+                lastTap = { well: w, time: now };
+            }
+        } else if (e.pointerType === 'mouse') {
+            dropWell(pointer.x, pointer.y);
+        } else {
+            // A touch on empty space might be the start of a scroll. Only drop a well if it
+            // ends as a tap; a scroll fires pointercancel instead of pointerup.
+            pendingTap = e.pointerId;
         }
         updateCursor();
     });
+
+    // Let touches on empty space scroll the page, but claim touches that land on a well
+    // so it can be dragged.
+    canvas.addEventListener('touchstart', function (e) {
+        var t = e.touches[0], r = canvas.getBoundingClientRect();
+        if (topWellAt(t.clientX - r.left, t.clientY - r.top)) e.preventDefault();
+    }, { passive: false });
 
     function endDrag() {
         if (dragged) {
@@ -200,11 +237,21 @@
         dragged = null;
         updateCursor();
     }
-    canvas.addEventListener('pointerup', endDrag);
-    canvas.addEventListener('pointercancel', endDrag);
+    canvas.addEventListener('pointerup', function (e) {
+        if (pendingTap === e.pointerId) {
+            var p = localPoint(e);
+            dropWell(p.x, p.y);
+        }
+        pendingTap = null;
+        endDrag();
+    });
+    canvas.addEventListener('pointercancel', function () {
+        pendingTap = null;
+        endDrag();
+    });
 
     canvas.addEventListener('dblclick', function (e) {
-        var w = topWellAt(e.clientX, e.clientY);
+        var p = localPoint(e), w = topWellAt(p.x, p.y);
         if (w && !w.dying) w.dying = 1;
     });
 
@@ -540,9 +587,17 @@
     resize();
     updateCursor();
 
+    // Pause the simulation while the hero is scrolled out of view
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+            onScreen = entries[0].isIntersecting;
+        }).observe(canvas);
+    }
+
     var last = performance.now();
     function frame(now) {
         requestAnimationFrame(frame);
+        if (!onScreen) { last = now; return; }
         // rAF timestamps can predate the performance.now() taken at startup, so floor at 0
         var dt = Math.min(Math.max((now - last) / (1000 / 60), 0), 3) * (reducedMotion ? 0.5 : 1);
         var i, k, poses = [];

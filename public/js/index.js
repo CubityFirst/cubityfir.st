@@ -87,3 +87,11 @@ function EasterEgg() {
     }
 }
 
+
+
+// Hide the scroll hint once the visitor has started scrolling
+function updateScrolled() {
+    document.body.classList.toggle('scrolled', window.scrollY > 20);
+}
+window.addEventListener('scroll', updateScrolled, { passive: true });
+updateScrolled();
