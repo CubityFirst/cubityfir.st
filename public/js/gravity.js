@@ -83,6 +83,15 @@
         }
     }
 
+    // PARTICLE_COUNT per screenful of canvas, so a canvas taller than the screen (the
+    // page-tall background prototype) isn't sparse. Tops up only; with a hero-sized canvas
+    // this is exactly PARTICLE_COUNT, as before.
+    function topUpParticles() {
+        var screens = (width * height) / Math.max(window.innerWidth * window.innerHeight, 1),
+            want = Math.round(PARTICLE_COUNT * Math.max(screens, 1));
+        if (want > particles.length) spawnParticles(want - particles.length);
+    }
+
     function moveParticles() {
         for (var i = 0; i < particles.length; i++) {
             var p = particles[i],
@@ -329,6 +338,8 @@
         vignette = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.sqrt(cx * cx + cy * cy));
         vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
         vignette.addColorStop(1, 'rgba(0, 0, 0, ' + VIGNETTE + ')');
+
+        topUpParticles();
     }
 
 
@@ -366,7 +377,17 @@
         canvas.style.cursor = claimed ? 'pointer' : 'default';
     });
 
+    // No gravity points for anyone who's asked for reduced motion: the particles keep
+    // drifting, but clicks don't start the swirl and collapse. Points already there go
+    // if the setting is switched on while the page is open.
+    var reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    function onReduceChange() { if (reduceMotion.matches) points.length = 0; }
+    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onReduceChange);
+    else if (reduceMotion.addListener) reduceMotion.addListener(onReduceChange);
+
     canvas.addEventListener('mousedown', function (e) {
+        // Left button only: middle-click is for autoscroll, right-click for the menu
+        if (e.button !== 0 || reduceMotion.matches) return;
         var pt = hoveredPoint();
         if (pt) {
             pt.grabX = pointer.x - pt.x;
@@ -401,7 +422,6 @@
     trailCtx = trail.getContext('2d');
     window.addEventListener('resize', resize);
     resize();
-    spawnParticles(PARTICLE_COUNT);
 
     // Pause while the hero is scrolled out of view
     if ('IntersectionObserver' in window) {

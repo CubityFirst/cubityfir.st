@@ -1,0 +1,13 @@
+{
+  "name": "cubityfirst",
+  "private": true,
+  "description": "cubityfir.st / michaelburr.co.uk: static site plus a small Worker for the terminal's /api/ask",
+  "scripts": {
+    "dev": "npx wrangler dev",
+    "deploy": "npx wrangler deploy",
+    "deploy:newsite": "npx wrangler deploy --env newsite"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.4.0"
+  }
+}

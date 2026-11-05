@@ -1,5 +1,5 @@
 /**
- * Below the fold (prototype): shared GitHub data, the projects grid, scroll reveals
+ * Below the fold: shared GitHub data, the projects grid, scroll reveals
  *
  * Fetches public repos and activity from the GitHub API once and shares them on
  * `window.site` so the terminal (js/terminal.js) can use the same data. Responses are
@@ -138,21 +138,32 @@
             a.target = '_blank';
             a.rel = 'noopener';
 
-            a.appendChild(el('span', 'proj-name', r.name));
+            // Header: name, with the star count (if any) top right
+            var head = el('span', 'proj-head');
+            head.appendChild(el('span', 'proj-name', r.name));
+            if (r.stargazers_count) {
+                var stars = el('span', 'proj-stars', '★ ' + r.stargazers_count);
+                stars.title = r.stargazers_count + (r.stargazers_count === 1 ? ' star' : ' stars');
+                head.appendChild(stars);
+            }
+            a.appendChild(head);
             a.appendChild(el('span', 'proj-desc' + (r.description ? '' : ' empty'),
                 r.description || 'no description yet'));
 
+            // Footer: language left, age right
             var meta = el('span', 'proj-meta');
             if (r.language) {
-                var lang = el('span');
+                var lang = el('span', 'proj-lang');
                 var dot = el('span', 'lang-dot');
                 dot.style.background = LANG_COLORS[r.language] || '#808080';
                 lang.appendChild(dot);
                 lang.appendChild(document.createTextNode(r.language));
+                lang.title = r.language;
                 meta.appendChild(lang);
             }
-            if (r.stargazers_count) meta.appendChild(el('span', null, '★ ' + r.stargazers_count));
-            meta.appendChild(el('span', null, 'updated ' + ago(r.pushed_at)));
+            var when = el('span', 'proj-when', ago(r.pushed_at));
+            when.title = 'updated ' + stamp(r.pushed_at);
+            meta.appendChild(when);
             a.appendChild(meta);
 
             grid.appendChild(a);
@@ -170,28 +181,29 @@
 
 
     /**
-     * Prototype C switch: background in the hero only, or all the way down. The class is
-     * set early by an inline script in <head> (from ?bg=full) to avoid a flash.
+     * Background mode: set as data-bg on <html> by an inline script in <head>, before
+     * first paint. "page" (default) makes the canvas as tall as the page; ?bg=full and
+     * ?bg=hero select the other two.
      */
-    var root = document.documentElement;
-    Array.prototype.forEach.call(document.querySelectorAll('[data-bg]'), function (b, _, all) {
-        function sync() {
-            Array.prototype.forEach.call(all, function (x) {
-                x.setAttribute('aria-pressed', String(root.classList.contains('bg-full') === (x.getAttribute('data-bg') === 'full')));
+    var mode = document.documentElement.getAttribute('data-bg') || 'hero';
+
+    // A page-tall canvas has to follow the page's height (cards loading, text wrapping).
+    // gravity.js only listens for window resizes, so pass height changes on as one.
+    if (mode === 'page' && 'ResizeObserver' in window) {
+        var lastH = 0, queued = false;
+        new ResizeObserver(function () {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(function () {
+                queued = false;
+                var h = document.body.offsetHeight;
+                if (h !== lastH) {
+                    lastH = h;
+                    window.dispatchEvent(new Event('resize'));
+                }
             });
-        }
-        b.addEventListener('click', function () {
-            var full = b.getAttribute('data-bg') === 'full';
-            root.classList.toggle('bg-full', full);
-            var url = new URL(location.href);
-            if (full) url.searchParams.set('bg', 'full'); else url.searchParams.delete('bg');
-            history.replaceState(null, '', url);
-            // gravity.js sizes itself to the canvas on resize
-            window.dispatchEvent(new Event('resize'));
-            sync();
-        });
-        sync();
-    });
+        }).observe(document.body);
+    }
 
 
     /**

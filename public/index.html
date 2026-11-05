@@ -7,7 +7,36 @@
   <title> | Landing Page</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/below.css">
-  <script>if (/[?&]bg=full(&|$)/.test(location.search)) document.documentElement.classList.add('bg-full');</script>
+  <script>
+    // Background mode, set before first paint. Default "page": the canvas is as tall as
+    // the page and scrolls with it. ?bg=full pins it behind the page instead, ?bg=hero
+    // keeps it to the first screen (no data-bg). See the background section in below.css.
+    (function (m) {
+      var mode = m ? m[1] : 'page';
+      if (mode !== 'hero') document.documentElement.setAttribute('data-bg', mode);
+    })(/[?&]bg=(hero|full|page)(&|$)/.exec(location.search));
+  </script>
+  <script>
+    // Who the page is for depends on the domain: michaelburr.co.uk shows the real name,
+    // everywhere else (cubityfir.st) the handle. ?as=michaelburr previews it on any host.
+    // Elements marked data-ident get filled in once the DOM is ready (hidden until then,
+    // see style.css), and js/terminal.js reads window.identity.
+    (function () {
+      var mb = /(^|\.)michaelburr\.co\.uk$/.test(location.hostname) || /[?&]as=michaelburr(&|$)/.test(location.search);
+      var id = window.identity = mb
+        ? { key: 'mb', name: 'Michael Burr', user: 'michael', host: 'michaelburr.co.uk', email: 'michael@michaelburr.co.uk' }
+        : { key: 'cf', name: 'cubityfirst', user: 'cubity', host: 'cubityfir.st', email: 'cubity@cubityfir.st' };
+      document.documentElement.setAttribute('data-site', id.key);
+      document.addEventListener('DOMContentLoaded', function () {
+        Array.prototype.forEach.call(document.querySelectorAll('[data-ident]'), function (n) {
+          var k = n.getAttribute('data-ident');
+          if (k === 'mailto') n.href = 'mailto:' + id.email;
+          else n.textContent = k === 'login' ? id.user + '@' + id.host : id[k];
+        });
+        document.documentElement.classList.add('ident-ready');
+      });
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
   <!--Browser Theming for Chrome, Firefox, Opera + Windows Phone + iOS Safari-->
   <meta name="theme-color" content="#37383F">
@@ -20,15 +49,15 @@
 <canvas id="c"></canvas>
 <div class="boxcontainer clickable">
   <div class="box clickable" id="box" style="display: block;">
-    <h1 class="title unclickable" onclick="switchVisible()">cubityfirst</h1>
+    <h1 class="title unclickable" onclick="switchVisible()" data-ident="name">cubityfirst</h1>
     <p class="desc">
       <span id="desc1" style="color: #4087ED">developer</span>;
       <span id="desc2" style="color: #F9A532">engineer</span>;
       <span id="desc3" style="color: #ac39ac"><br>memer</span>;
       <span id="desc4" style="color: #dc3b3b">sysadmin</span>;
       <span id="desc5" class="unclickable" style="color: #00aba5" onclick="location='https://www.youtube.com/watch?v=dQw4w9WgXcQ'">and more</span>;</p>
-    <a href="mailto:cubity@cubityfir.st" target="_blank">
-      <p class="link unclickable">cubity@cubityfir.st</p>
+    <a href="mailto:cubity@cubityfir.st" target="_blank" data-ident="mailto">
+      <p class="link unclickable" data-ident="email">cubity@cubityfir.st</p>
     </a>
     <div class="linkcont unclickable">
       <a href="http://steamcommunity.com/id/cubityfirst" target="_blank">
@@ -141,11 +170,9 @@
 </a>
 </section>
 
-<!-- Below the fold: prototypes, see css/below.css and js/below.js -->
+<!-- Below the fold, see css/below.css and js/below.js -->
 <section class="below reveal" id="more">
-  <span class="proto-tag">prototype A · projects</span>
   <h2 class="sec-title"><span class="sec-path">~/</span>projects</h2>
-  <p class="sec-lede">things I&rsquo;ve been building lately, straight from GitHub.</p>
   <div class="proj-grid" id="proj-grid">
     <div class="proj skeleton"></div><div class="proj skeleton"></div><div class="proj skeleton"></div>
     <div class="proj skeleton"></div><div class="proj skeleton"></div><div class="proj skeleton"></div>
@@ -154,9 +181,8 @@
 </section>
 
 <section class="below reveal" id="terminal">
-  <span class="proto-tag">prototype B · terminal (interactive faq)</span>
   <div class="term">
-    <div class="term-bar"><i></i><i></i><i></i><span>cubity@cubityfir.st: ~</span></div>
+    <div class="term-bar"><i></i><i></i><i></i><span><span data-ident="login">cubity@cubityfir.st</span>: ~</span></div>
     <div class="term-body" id="term-body">
       <div id="term-out" aria-live="polite">
         <noscript>
@@ -165,7 +191,7 @@
         </noscript>
       </div>
       <form class="term-line" id="term-form" autocomplete="off" hidden>
-        <label for="term-input"><span class="p-user">cubity@cubityfir.st</span>:<span class="p-path">~</span>$&nbsp;</label>
+        <label for="term-input"><span class="p-user" data-ident="login">cubity@cubityfir.st</span>:<span class="p-path">~</span>$&nbsp;</label>
         <input id="term-input" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send"
                aria-label="Type a command or a question">
       </form>
@@ -181,25 +207,10 @@
   </div>
 </section>
 
-<footer class="site-foot">
-  <span>&copy; cubityfirst &middot; made with too many particles</span>
-  <span class="foot-links">
-    <a href="mailto:cubity@cubityfir.st">email</a>
-    <a href="https://github.com/CubityFirst" target="_blank" rel="noopener">github</a>
-    <a href="https://bsky.app/profile/cubityfir.st" target="_blank" rel="noopener">bluesky</a>
-    <a href="#top" onclick="window.scrollTo({top: 0}); return false;">back to top &uarr;</a>
-  </span>
-</footer>
-
-<div class="proto-switch" role="group" aria-label="Prototype: background">
-  <span>bg</span>
-  <button type="button" data-bg="hero">hero only</button>
-  <button type="button" data-bg="full">all the way down</button>
-</div>
-
 <script src="js/index.js"></script>
 <script src="js/gravity.js"></script>
 <script src="js/below.js"></script>
+<script src="js/toktrack.js"></script>
 <script src="js/terminal.js"></script>
 </body>
 </html>

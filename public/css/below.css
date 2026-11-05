@@ -1,7 +1,7 @@
 /*
 ==========================
 
-	BELOW THE FOLD (prototype)
+	BELOW THE FOLD
 
 ==========================
 */
@@ -17,18 +17,6 @@
 
 .below + .below {
   padding-top: 0;
-}
-
-/* Marks each block as a prototype while we decide what stays */
-.proto-tag {
-  display: inline-block;
-  margin-bottom: 14px;
-  padding: 2px 8px;
-  border: 1px dashed #4f5157;
-  border-radius: 4px;
-  color: #6d6f75;
-  font-size: 11px;
-  letter-spacing: 0.04em;
 }
 
 .sec-title {
@@ -87,19 +75,35 @@
   transform: translateY(-2px);
 }
 
+/* Name, with the star count (if any) pinned top right */
+.proj-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
 .proj-name {
+  flex: 1;
+  min-width: 0;
   color: #fff;
   font-weight: 700;
   word-break: break-word;
 }
 
+.proj-stars {
+  flex-shrink: 0;
+  color: #6d6f75;
+  font-size: 0.75em;
+  white-space: nowrap;
+}
+
 .proj-desc {
   margin: 8px 0 14px;
   color: #8e9096;
-  font-size: 0.82em;
-  line-height: 1.5;
+  font-size: 0.76em;
+  line-height: 1.45;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -109,13 +113,28 @@
   font-style: italic;
 }
 
+/* One row on every card: language left, age pinned right. Nothing wraps; a long
+   language name is the only thing that gives way (with an ellipsis). */
 .proj-meta {
   margin-top: auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
   color: #6d6f75;
   font-size: 0.75em;
+  white-space: nowrap;
+}
+
+.proj-lang {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proj-when {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .lang-dot {
@@ -171,6 +190,11 @@
   border-radius: 50%;
   background: #3c3e44;
 }
+
+/* Window controls: close, minimise, zoom */
+.term-bar i:nth-of-type(1) { background: #ff5f57; }
+.term-bar i:nth-of-type(2) { background: #febc2e; }
+.term-bar i:nth-of-type(3) { background: #28c840; }
 
 .term-bar span {
   margin-left: 8px;
@@ -304,35 +328,267 @@
 }
 
 
-/* ---------- footer ---------- */
+/* ---------- toktrack (js/toktrack.js) ----------
+   Takes over the terminal window like a full-screen program. Colours follow the app's
+   dark theme in Windows Terminal's default (Campbell) palette. */
 
-.site-foot {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 40px 16px 56px;
-  border-top: 1px solid #3a3c42;
+.tt {
+  --tt-accent: #3a96dd;
+  --tt-muted: #767676;
+  --tt-cost: #c060d8;
+  --tt-date: #c19c00;
+  --tt-blue: #3b78ff;
+  --tt-warm: #ff8700;
+  --tt-red: #e74856;
+  --tt-bar: #13a10e;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #ccc;
+  line-height: 1.45;
+  outline: none;
+  white-space: nowrap;
+}
+
+.tt button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tt-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2ch;
+}
+
+.tt-tab { color: var(--tt-muted); }
+.tt-tab:hover { color: #ccc; }
+.tt-tab.tt-on { color: var(--tt-accent); font-weight: 700; }
+
+.tt-rule {
+  margin: 4px 0 8px;
+  border-top: 1px solid #555;
+}
+
+.tt-rule + .tt-foot { margin-top: -4px; }
+
+.tt-view {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3c3e44 transparent;
+}
+
+.tt-foot {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 2ch;
+  color: #ccc;
+}
+
+.tt-key { color: var(--tt-accent); }
+.tt-quit:hover { text-decoration: underline; }
+
+.tt-muted  { color: var(--tt-muted); }
+.tt-accent { color: var(--tt-accent); }
+.tt-cost   { color: var(--tt-cost); }
+.tt-strong { color: #fff; font-weight: 700; }
+.tt-center { text-align: center; }
+.tt-small  { font-size: 0.9em; }
+.tt-gap    { margin-top: 0.8em; }
+.tt-num    { color: #f2f2f2; }
+.tt-r      { text-align: right; }
+.tt-loading { padding-top: 4em; }
+
+/* Overview */
+.tt-overview { text-align: center; }
+
+/* The total is the selected item: Enter (or a click) opens the daily table */
+.tt-hero {
+  color: var(--tt-accent) !important;
+  font-weight: 700;
+}
+
+.tt-hero:hover { text-decoration: underline; }
+
+.tt-sources {
+  display: inline-grid;
+  grid-template-columns: auto 18ch auto;
+  gap: 0 1.5ch;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  color: #6d6f75;
-  font-size: 0.8em;
+  text-align: left;
 }
 
-.site-foot a {
-  color: #808080;
-  transition: color 0.2s ease;
+.tt-src-name { justify-self: end; color: #f2f2f2; }
+
+.tt-bar {
+  position: relative;
+  display: block;
+  height: 1.1em;
+  background: radial-gradient(#4a4a4a 0.6px, transparent 0.9px) 0 0 / 3px 3px;
 }
 
-.site-foot a:hover {
-  color: #fff;
+.tt-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--tt-bar);
 }
 
-.site-foot .foot-links {
+.tt-heat {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.6em;
+}
+
+.tt-probe { visibility: hidden; position: absolute; }
+
+.tt-grid {
+  display: grid;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.tt-daylabel {
+  padding-right: 0.5ch;
+  color: var(--tt-muted);
+}
+
+.tt-cell {
+  display: inline-block;
+  width: 2ch;
+  height: 1.25em;
+}
+
+.tt-l0 { background: #303030; }
+.tt-l1 { background: #005f00; }
+.tt-l2 { background: #008700; }
+.tt-l3 { background: #00af00; }
+.tt-l4 { background: #00d700; }
+.tt-future { background: none; }
+
+.tt-months {
+  position: relative;
+  height: 1.4em;
+  color: var(--tt-muted);
+}
+
+.tt-months span {
+  position: absolute;
+  top: 0.15em;
+}
+
+.tt-legend {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 0.6ch;
+  margin-top: 0.4em;
+}
+
+.tt-legend .tt-cell { width: 1.6ch; height: 1em; }
+
+/* Daily / weekly / monthly table */
+.tt-b { font-weight: 700; }
+.tt-date { color: var(--tt-date); }
+.tt-detail-head { text-align: center; white-space: pre; }
+
+.tt-daily {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tt-modes {
+  display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 0 2ch;
+  margin-bottom: 4px;
+}
+
+.tt-mode { color: #f2f2f2 !important; }
+.tt-mode.tt-on { color: var(--tt-accent) !important; font-weight: 700; }
+.tt-sort:hover .tt-b, .tt-mode:hover { text-decoration: underline; }
+
+.tt-row {
+  display: grid;
+  grid-template-columns: 10ch minmax(0, 1fr) 14ch 9ch 14ch minmax(6ch, 12ch);
+  gap: 0 1.5ch;
+  align-items: center;
+  padding: 0 1ch;
+}
+
+.tt-row > span { overflow: hidden; text-overflow: ellipsis; }
+.tt-thead { color: #fff; font-weight: 700; }
+
+.tt-rows {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3c3e44 transparent;
+}
+
+.tt-rows .tt-row { cursor: pointer; }
+.tt-rows .tt-row:hover { background: rgba(255, 255, 255, 0.04); }
+.tt-rows .tt-row.tt-sel { background: rgba(58, 150, 221, 0.22); }
+
+.tt-high { color: var(--tt-red); }
+.tt-warn { color: var(--tt-warm); }
+
+/* Stats */
+.tt-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+  gap: 10px 2ch;
+  max-width: 82ch;
+  margin: 1em auto;
+}
+
+.tt-card {
+  padding: 0.4em 1ch 0.6em;
+  border: 1px solid currentColor;
+  text-align: center;
+}
+
+.tt-card-title { margin-bottom: 0.9em; }
+.tt-card-value { font-weight: 700; }
+
+.tt-card.c-accent { color: var(--tt-accent); }
+.tt-card.c-blue   { color: var(--tt-blue); }
+.tt-card.c-date   { color: var(--tt-date); }
+.tt-card.c-cost   { color: var(--tt-cost); }
+.tt-card.c-bar    { color: var(--tt-bar); }
+.tt-card.c-warm   { color: var(--tt-red); }
+.tt-card.c-warm .tt-card-value { color: var(--tt-warm); }
+
+/* Models */
+.tt-models {
+  display: grid;
+  grid-template-columns: minmax(0, auto) auto auto minmax(10ch, 1fr);
+  gap: 0 2.5ch;
+  align-items: center;
+  max-width: 82ch;
+  margin: 0 auto;
+}
+
+.tt-models > span { overflow: hidden; text-overflow: ellipsis; }
+.tt-th { color: #fff; font-weight: 700; }
+
+@media (max-width: 520px) {
+  .tt-models { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 1.5ch; }
+  .tt-usage, .tt-wide { display: none !important; }
+  .tt-row { grid-template-columns: 10ch minmax(0, 1fr) auto auto; gap: 0 1ch; padding: 0; }
+  .tt-detail-head .tt-date { white-space: pre-wrap; }
+  .tt-sources { grid-template-columns: auto 8ch auto; }
 }
 
 
@@ -350,7 +606,6 @@
 @media (max-width: 520px) {
   .below {padding: 64px 16px;}
   .term-body {height: 60vh; font-size: 0.78em;}
-  .site-foot {flex-direction: column; align-items: flex-start;}
 }
 
 @media (pointer: coarse) {
@@ -367,86 +622,63 @@
 /*
 ==========================
 
-	PROTOTYPE C: background all the way down
+	BACKGROUND beyond the hero
 
-	html.bg-full pins the canvas to the viewport so the field sits behind every
-	section. Sections let clicks through to the canvas except on things you can
+	html[data-bg="page"] (default): canvas as tall as the whole page, scrolling with
+	it, so gravity points and particles move up and down with the content.
+	html[data-bg="full"] (?bg=full): canvas pinned to the viewport, the page scrolls
+	over it. No data-bg (?bg=hero): canvas only behind the first screen.
+
+	Either way, sections let clicks through to the canvas except on things you can
 	interact with, so gravity points can be dropped anywhere on the page.
 
 ==========================
 */
 
-html.bg-full #c {
+html[data-bg="full"] #c {
   position: fixed;
 }
 
-html.bg-full .below,
-html.bg-full .site-foot {
+/* Make <body> the canvas's containing block instead of the hero, so 100% height is
+   the whole page. The hero's overflow:hidden no longer clips it, since the canvas's
+   containing block is now outside the hero. */
+html[data-bg="page"] body {
+  position: relative;
+}
+
+html[data-bg="page"] .hero {
+  position: static;
+}
+
+html[data-bg="page"] .scroll-hint {
+  top: calc(100vh - 46px);
+  top: calc(100svh - 46px);
+  bottom: auto;
+}
+
+html[data-bg] .below {
   position: relative;
   z-index: 1;
   pointer-events: none;
 }
 
-html.bg-full .below a,
-html.bg-full .below button,
-html.bg-full .proj,
-html.bg-full .term,
-html.bg-full .site-foot a {
+html[data-bg] .below a,
+html[data-bg] .below button,
+html[data-bg] .proj,
+html[data-bg] .term {
   pointer-events: auto;
 }
 
-html.bg-full .sec-lede,
-html.bg-full .proto-tag,
-html.bg-full .site-foot {
+html[data-bg] .sec-lede {
   text-shadow: 0 0 6px #000, 0 0 14px #000;
 }
 
 /* Cards go slightly glassy so the field shows through without hurting legibility */
-html.bg-full .proj {
+html[data-bg] .proj {
   background: rgba(41, 43, 47, 0.82);
   backdrop-filter: blur(3px);
 }
 
-html.bg-full .proj:hover {
+html[data-bg] .proj:hover {
   background: rgba(44, 47, 53, 0.9);
-}
-
-html.bg-full .site-foot {
-  border-top-color: rgba(255, 255, 255, 0.08);
-}
-
-/* Prototype-only switch, bottom right */
-.proto-switch {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border: 1px dashed #4f5157;
-  border-radius: 999px;
-  background: rgba(30, 31, 34, 0.9);
-  font-size: 11px;
-}
-
-.proto-switch span {
-  padding: 0 6px 0 8px;
-  color: #6d6f75;
-}
-
-.proto-switch button {
-  padding: 4px 10px;
-  border: 0;
-  border-radius: 999px;
-  background: none;
-  color: #808080;
-  font: inherit;
-  cursor: pointer;
-}
-
-.proto-switch button[aria-pressed="true"] {
-  background: #3c3e44;
-  color: #fff;
 }

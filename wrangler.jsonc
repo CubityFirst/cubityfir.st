@@ -2,28 +2,62 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cubityfirst",
   "compatibility_date": "2026-10-01",
+  // Static site in public/; the Worker only handles /api/* (the terminal's /api/ask)
+  "main": "src/worker.js",
   "workers_dev": true,
   "preview_urls": true,
   "assets": {
     "directory": "public",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
   },
   "routes": [
     { "pattern": "cubityfir.st", "custom_domain": true },
     { "pattern": "michaelburr.co.uk", "custom_domain": true }
   ],
+  // AI Gateway the terminal's questions go through. The Anthropic key is stored in the
+  // gateway; the Worker authenticates with the CF_AIG_TOKEN secret
+  // (`npx wrangler secret put CF_AIG_TOKEN`).
+  "vars": {
+    "AIG_ACCOUNT_ID": "d843ae90cab33e54f4d284bc65d2fd6a",
+    "AIG_GATEWAY_ID": "cubityfir-st"
+  },
+  // Questions per visitor (IP) per minute
+  "ratelimits": [
+    { "name": "ASK_LIMITER", "namespace_id": "1001", "simple": { "limit": 6, "period": 60 } }
+  ],
+  // toktrack usage data for the terminal's `toktrack` command (src/toktrack.js), uploaded
+  // every 12 hours by scripts/upload-toktrack.ps1.
+  "r2_buckets": [
+    { "binding": "TOKTRACK", "bucket_name": "cubityfirst-toktrack" }
+  ],
   "previews": {},
   "env": {
     // Test site: `npx wrangler deploy --env newsite` deploys a separate worker
-    // (cubityfirst-newsite) on newsite.cubityfir.st, leaving production untouched
+    // (cubityfirst-newsite) on newsite.cubityfir.st, leaving production untouched.
+    // Bindings and vars aren't inherited by environments, so they're repeated here, and
+    // the secret has to be set separately (`npx wrangler secret put CF_AIG_TOKEN --env newsite`).
     "newsite": {
       "workers_dev": false,
       "assets": {
         "directory": "public",
-        "not_found_handling": "404-page"
+        "binding": "ASSETS",
+        "not_found_handling": "404-page",
+        "run_worker_first": ["/api/*"]
       },
       "routes": [
         { "pattern": "newsite.cubityfir.st", "custom_domain": true }
+      ],
+      "vars": {
+        "AIG_ACCOUNT_ID": "d843ae90cab33e54f4d284bc65d2fd6a",
+        "AIG_GATEWAY_ID": "cubityfir-st"
+      },
+      "ratelimits": [
+        { "name": "ASK_LIMITER", "namespace_id": "1002", "simple": { "limit": 6, "period": 60 } }
+      ],
+      "r2_buckets": [
+        { "binding": "TOKTRACK", "bucket_name": "cubityfirst-toktrack" }
       ]
     }
   }

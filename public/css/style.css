@@ -136,6 +136,12 @@ img {
   cursor: pointer;
 }
 
+/* On michaelburr.co.uk the name and email are swapped in on DOMContentLoaded (see the
+   inline script in index.html); keep the cubityfir.st text from flashing first */
+html[data-site="mb"]:not(.ident-ready) [data-ident] {
+  visibility: hidden;
+}
+
 .desc {
   line-height: 25px;
   margin:  10px 0;

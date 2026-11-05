@@ -1,9 +1,9 @@
 /**
- * Interactive terminal (prototype)
+ * Interactive terminal
  *
  * A small fake shell that doubles as the FAQ. Known commands run directly; anything else
- * is treated as a plain-English question and matched against FAQ below by keyword. That
- * match step, ask(), is the place an LLM-backed answer could slot in later.
+ * is sent to /api/ask (src/worker.js) for a generated answer. If that's unreachable (or
+ * busy), it falls back to matching the built-in FAQ below by keyword.
  *
  * The intro (whoami, ls, tail) types itself out the first time the terminal scrolls into
  * view. Clicking the terminal, or any command link, skips to the end.
@@ -30,8 +30,11 @@
         introDone = false,
         focusAfterIntro = false;
 
+    // Name, email and hostname for the domain we're on (set in index.html's <head>)
+    var ID = window.identity || { key: 'cf', name: 'cubityfirst', user: 'cubity', host: 'cubityfir.st', email: 'cubity@cubityfir.st' };
+
     var LINKS = {
-        email:     { label: 'cubity@cubityfir.st',           href: 'mailto:cubity@cubityfir.st' },
+        email:     { label: ID.email,                        href: 'mailto:' + ID.email },
         github:    { label: 'github.com/CubityFirst',        href: 'https://github.com/CubityFirst' },
         bluesky:   { label: 'bsky.app/profile/cubityfir.st', href: 'https://bsky.app/profile/cubityfir.st' },
         twitter:   { label: 'twitter.com/cubityfirst',       href: 'https://twitter.com/cubityfirst' },
@@ -102,7 +105,7 @@
 
     function promptNode() {
         var p = el('span', 'prompt');
-        p.appendChild(span('cubity@cubityfir.st', 'p-user'));
+        p.appendChild(span(ID.user + '@' + ID.host, 'p-user'));
         p.appendChild(document.createTextNode(':'));
         p.appendChild(span('~', 'p-path'));
         p.appendChild(document.createTextNode('$ '));
@@ -154,13 +157,72 @@
         }, function () { print(err('GitHub is unreachable right now')); });
     }
 
+    // about.txt: a short bio that reads as one piece, rather than a pile of other answers
+    function about() {
+        print(span(ID.name, 'q'));
+        tagline();
+        print();
+        print('Senior Technical Engineer since 2024, working on cloud infrastructure and cybersecurity. based in the south of England.');
+        print();
+        print('outside work I help with support and build features for ', link('ShareX', 'https://getsharex.com'),
+              ' (since 2016), and make whatever else ends up in ', cmd('projects'), '.');
+        print();
+        print('always open to work and collaboration: ', cmd('contact'), '.');
+    }
+
+    /**
+     * age: how old I am, to ten decimal places, ticking up live until the next command
+     * (or Ctrl+C). Born 8 October 2000; a birthday starts at midnight UK time, which
+     * in October is BST, so 23:00 UTC the day before. The fraction is how far through
+     * the current birthday-to-birthday year we are.
+     */
+    var ticker = null;
+
+    function stopTicker() {
+        if (ticker) { ticker(); ticker = null; }
+    }
+
+    function birthdayIn(year) { return Date.UTC(year, 9, 7, 23); }
+
+    function ageAt(now) {
+        var y = new Date(now).getUTCFullYear();
+        if (now < birthdayIn(y)) y--;
+        var last = birthdayIn(y), next = birthdayIn(y + 1);
+        return { years: (y - 2000) + (now - last) / (next - last), last: last, next: next };
+    }
+
+    function countdown(ms) {
+        var s = Math.floor(ms / 1000), two = function (n) { return String(n).padStart(2, '0'); };
+        return Math.floor(s / 86400) + 'd ' + two(Math.floor(s / 3600) % 24) + 'h ' +
+               two(Math.floor(s / 60) % 60) + 'm ' + two(s % 60) + 's';
+    }
+
+    function age() {
+        stopTicker();
+        var who = ID.key === 'mb' ? 'Michael' : ID.name,
+            value = span('', 'w5'), note = dim('');
+        print(who + ' is ', value, ' years old');
+        print(note);
+        function tick() {
+            var now = Date.now(), a = ageAt(now);
+            value.textContent = a.years.toFixed(10);
+            note.textContent = now - a.last < 864e5
+                ? '(it’s his birthday today!)'
+                : '(next birthday 8 Oct, in ' + countdown(a.next - now) + ')';
+        }
+        tick();
+        var t = setInterval(tick, 50);
+        ticker = function () { clearInterval(t); };
+    }
+
     function gravity() {
         print('a small gravity sim. on the top screen:');
         print('  click empty space    drop a gravity point');
         print('  drag a point         move it');
         print('  points that touch    merge and grow');
         print('  too big, or dbl-click  it collapses');
-        print('type ', cmd('exit'), ' to go back up and play.');
+        if (reducedMotion) print(dim('(gravity points are off here, since your device asks for reduced motion.)'));
+        else print('type ', cmd('exit'), ' to go back up and play.');
     }
 
 
@@ -176,8 +238,8 @@
      */
     var FAQ = [
         { q: 'who are you?',
-          k: 'who whoami about yourself cubity cubityfirst name',
-          a: function () { print('cubityfirst.'); tagline(); print('see ', cmd('faq'), ' for more, or ', cmd('projects'), '.'); } },
+          k: 'who whoami about yourself cubity cubityfirst michael burr name',
+          a: function () { print(ID.name + '.'); tagline(); print('see ', cmd('faq'), ' for more, or ', cmd('projects'), '.'); } },
         { q: 'how do I get in touch?',
           k: 'contact email mail reach touch talk message dm get',
           a: contact },
@@ -236,8 +298,6 @@
             .filter(function (r) { return r.s > 0; })
             .sort(function (a, b) { return b.s - a.s; });
 
-        // Hook point: with no keyword match, an LLM-backed answer could go here, e.g. POST
-        // the question to a Worker that knows the FAQ and the GitHub data.
         if (!ranked.length) return false;
 
         var result = answer(ranked[0].i);
@@ -272,7 +332,7 @@
     }
 
     var FILES = {
-        'about.txt':    function () { print('cubityfirst.'); tagline(); print(); return workingOn(); },
+        'about.txt':    about,
         'faq.md':       function () { return COMMANDS.faq.run([]); },
         'contact.txt':  contact,
         'pgp-key':      function () { return catRemote('/key', 'pgp-key'); },
@@ -302,6 +362,60 @@
             });
             print(link('all ' + list.length + ' on GitHub →', 'https://github.com/CubityFirst?tab=repositories'));
         }, function () { print(err('ls: cannot access ‘projects/’: GitHub unreachable')); });
+    }
+
+
+    /**
+     * toktrack: my AI coding token usage, from /api/toktrack. Plain `toktrack` opens a
+     * look-alike of the app's TUI (js/toktrack.js), which takes over the window until it's
+     * quit; `toktrack stats` just prints the numbers.
+     */
+    var activeTUI = null, toktrackData = null;
+
+    function loadToktrack() {
+        if (!toktrackData) {
+            // no-cache: the worker caches the summary, so asking it each time is cheap and
+            // never leaves an old response shape in the browser's cache
+            toktrackData = fetch('/api/toktrack', { cache: 'no-cache' }).then(function (r) {
+                if (!r.ok) throw new Error(r.status);
+                return r.json();
+            });
+            toktrackData.catch(function () { toktrackData = null; });
+        }
+        return toktrackData;
+    }
+
+    function toktrackStats() {
+        return loadToktrack().then(function (d) {
+            var s = d.stats, n = function (x) { return x.toLocaleString('en-US'); };
+            [['total tokens', n(s.totalTokens)],
+             ['daily average', n(s.dailyAvgTokens)],
+             ['peak day', s.peakDay ? s.peakDay.date + ' (' + n(s.peakDay.tokens) + ')' : 'n/a'],
+             ['total cost', '$' + s.totalCost.toFixed(2)],
+             ['daily avg cost', '$' + s.dailyAvgCost.toFixed(2)],
+             ['active days', String(s.activeDays)]
+            ].forEach(function (r) { print(dim(pad(r[0], 16)), r[1]); });
+            print(dim('(costs are what the tokens would cost at API prices. up to ' + d.updated + ')'));
+        });
+    }
+
+    function toktrackTUI() {
+        if (!window.TokTrackTUI) return print(err('toktrack: not available'));
+        var formWasHidden = form.hidden;
+        out.hidden = true;
+        form.hidden = true;
+        activeTUI = window.TokTrackTUI.open(body, loadToktrack());
+        return activeTUI.done.then(function (d) {
+            return d && print(dim('toktrack: ' + d.stats.totalTokens.toLocaleString('en-US') + ' tokens across ' + d.stats.activeDays + ' days'));
+        }, function () {
+            print(err('toktrack: couldn’t load usage data right now'));
+        }).then(function () {
+            activeTUI = null;
+            out.hidden = false;
+            form.hidden = formWasHidden;
+            scrollDown();
+            if (!formWasHidden) input.focus({ preventScroll: true });
+        });
     }
 
 
@@ -377,7 +491,22 @@
             print(dim('opening '), link(LINKS[k].label, LINKS[k].href));
         } },
 
-        clear: { help: 'clear the screen', run: function () { out.textContent = ''; } },
+        toktrack: { help: 'my AI coding token usage', run: function (args) {
+            var sub = (args[0] || '').toLowerCase();
+            if (sub === 'stats') return toktrackStats().catch(function () { print(err('toktrack: couldn’t load usage data right now')); });
+            if (sub === '--version' || sub === '-v') return print('toktrack (web edition)');
+            if (sub === '--help' || sub === '-h' || sub === 'help') {
+                print('usage: toktrack [stats]');
+                print(dim('  (no args)  open the dashboard. tab switches view, q quits'));
+                return print(dim('  stats      print the headline numbers'));
+            }
+            if (sub) return print(err('toktrack: unknown command ‘' + args[0] + '’. '), dim('try '), cmd('toktrack --help'));
+            return toktrackTUI();
+        } },
+
+        age: { help: 'how old I am, precisely', run: age },
+
+        clear: { help: 'clear the screen and start fresh', run: clearScreen },
 
         // Hidden extras
         history: { hidden: true, run: function () {
@@ -394,7 +523,14 @@
         } },
         sudo: { hidden: true, run: function () { print('cubity is not in the sudoers file. This incident will be reported.'); } },
         rm: { hidden: true, run: function (args) {
-            print(err(args.join(' ').indexOf('-rf') >= 0 ? 'rm: refusing to remove ‘/’: it’s load-bearing' : 'rm: permission denied'));
+            var targets = args.filter(function (a) { return a[0] !== '-'; });
+            if (!targets.length) return print(err('rm: missing operand'));
+            targets.forEach(function (t) {
+                var f = t.replace(/^~\//, '');
+                if (/^(\/|\/\*|~\/?|\*|\.|\.\.)$/.test(t)) print(err('rm: refusing to remove ‘' + t + '’: it’s load-bearing'));
+                else if (FILES[f] || DIRS.indexOf(f.replace(/\/?$/, '/')) >= 0) print(err('rm: cannot remove ‘' + t + '’: Permission denied'));
+                else print(err('rm: cannot remove ‘' + t + '’: No such file or directory'));
+            });
         } },
         vim: { hidden: true, run: function () { print('you’d never get out. try ', cmd('help'), '.'); } },
         exit: { hidden: true, run: function () {
@@ -408,30 +544,208 @@
     COMMANDS.hello = COMMANDS.hey = COMMANDS.hi;
     COMMANDS.logout = COMMANDS.exit;
     COMMANDS.cls = COMMANDS.clear;
+    COMMANDS.birthday = { hidden: true, run: age };
+
+
+    /**
+     * Generated answers
+     *
+     * Anything that isn't a command is sent to /api/ask (src/worker.js), which answers
+     * with Claude using what's written down about me and my GitHub projects. The last few
+     * exchanges go along so follow-up questions work. Answers are plain text; `commands`
+     * in backticks become clickable, and URLs and email addresses become links.
+     */
+    var aiHistory = [], aiNoted = false,
+        MAX_QUESTION = 300;
+
+    // Splits answer text into strings and clickable nodes
+    function richParts(text) {
+        var parts = [], re = /`([^`\n]+)`|(https?:\/\/[^\s<>()]+[^\s<>().,;:!?'"])|([a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+)|((?:[a-z0-9-]+\.)+(?:st|uk|com|io|tv|app|me)\/[^\s<>()]*[^\s<>().,;:!?'"])/gi,
+            last = 0, m;
+        while ((m = re.exec(text))) {
+            if (m.index > last) parts.push(text.slice(last, m.index));
+            if (m[1]) {
+                var c = m[1].trim(), first = c.split(/\s+/)[0].toLowerCase();
+                parts.push(COMMANDS.hasOwnProperty(first) ? cmd(c) : span(c, 'p-cmd'));
+            } else if (m[2]) {
+                parts.push(link(m[2].replace(/^https?:\/\//, ''), m[2]));
+            } else if (m[3]) {
+                parts.push(link(m[3], 'mailto:' + m[3]));
+            } else {
+                parts.push(link(m[4], 'https://' + m[4]));
+            }
+            last = re.lastIndex;
+        }
+        if (last < text.length) parts.push(text.slice(last));
+        return parts;
+    }
+
+    // Prints rich parts into `line`, typing the plain text unless motion is reduced.
+    // Stops where it is if the command is cancelled (Ctrl+C).
+    function typeParts(line, parts) {
+        if (reducedMotion) {
+            parts.forEach(function (p) { line.appendChild(typeof p === 'string' ? document.createTextNode(p) : p); });
+            return Promise.resolve();
+        }
+        var i = 0, me = job;
+        return new Promise(function (resolve) {
+            (function next() {
+                if (i >= parts.length || (me && me.cancelled)) return resolve();
+                var p = parts[i++];
+                if (typeof p !== 'string') { line.appendChild(p); scrollDown(); return next(); }
+                var node = document.createTextNode(''), k = 0;
+                line.appendChild(node);
+                (function chunk() {
+                    if (me && me.cancelled) return resolve();
+                    k = Math.min(p.length, k + 3);
+                    node.nodeValue = p.slice(0, k);
+                    scrollDown();
+                    if (k < p.length) setTimeout(chunk, 14);
+                    else next();
+                })();
+            })();
+        });
+    }
+
+    // Animated "thinking" line; returns a function that removes it
+    function thinking() {
+        var line = print(dim('thinking')), dots = 0;
+        var t = setInterval(function () {
+            dots = (dots + 1) % 4;
+            line.firstChild.textContent = 'thinking' + '...'.slice(0, dots);
+        }, 300);
+        return function () { clearInterval(t); line.remove(); };
+    }
+
+    // Resolves to true if it printed an answer, or to the error code if not
+    function askAI(text) {
+        if (text.length > MAX_QUESTION) {
+            print(err('that’s a bit long for me. '), dim('try a shorter question (up to ' + MAX_QUESTION + ' characters).'));
+            return Promise.resolve(true);
+        }
+        var stop = thinking(), me = job,
+            abort = window.AbortController ? new AbortController() : null;
+        onCancel(function () { stop(); if (abort) abort.abort(); });
+        return fetch('/api/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: text, history: aiHistory.slice(-6), site: ID.key }),
+            signal: abort ? abort.signal : undefined
+        }).then(function (r) {
+            return r.json().catch(function () { return { error: 'unavailable' }; });
+        }, function () {
+            return { error: 'offline' };
+        }).then(function (res) {
+            stop();
+            if (me && me.cancelled) return 'cancelled';
+            if (!res.answer) return res.error || 'unavailable';
+            aiHistory.push({ role: 'user', content: text }, { role: 'assistant', content: res.answer });
+            var lines = res.answer.split(/\n+/), chain = Promise.resolve();
+            lines.forEach(function (l) {
+                chain = chain.then(function () { return typeParts(print(), richParts(l)); });
+            });
+            return chain.then(function () {
+                if (!aiNoted) {
+                    aiNoted = true;
+                    print(dim('(answers to questions are written by an AI from what’s on this site, so they can be wrong. for anything important, '),
+                          cmd('contact'), dim(' me.)'));
+                }
+                return true;
+            });
+        });
+    }
+
+    // Empties the screen and forgets the conversation, so the next question starts fresh
+    function clearScreen() {
+        stopTicker();
+        out.textContent = '';
+        aiHistory = [];
+        aiNoted = false;
+    }
+
+    function notFound(text) {
+        var words = text.split(/\s+/);
+        if (words.length === 1 && !/\?$/.test(text)) {
+            print(err(words[0] + ': command not found. '), dim('try '), cmd('help'), dim(', or ask a question.'));
+        } else {
+            print('I don’t have an answer for that one yet. try ', cmd('faq'), ', or ask me directly: ',
+                  link(LINKS.email.label, LINKS.email.href));
+        }
+    }
 
 
     /**
      * Running things
      */
+    // A greeting on its own ("hi", "hey!", "hello there") gets the canned reply. One with
+    // more after it ("hi, what do you do?") is a question, so it goes on to be answered.
+    var GREETING_ONLY = /^(hi|hello|hey|hiya|heya|howdy|yo)\b[\s,!.]*(there|all|again|cubity|cubityfirst|michael|terminal)?[\s,!.?]*$/i;
+
+    // Questions about how old I am get the live counter rather than a generated answer.
+    // Only ones that are clearly about me: they name me ("how old is michael?", "when's
+    // his birthday?") or name nothing else ("how old?"). "how old is snapr" goes on to
+    // be answered like any other question.
+    var AGE_QUESTION = /\b(how old|age|aged|birthday|bday|born)\b/i,
+        ABOUT_ME = /\b(he|him|his|hes|you|your|youre|u|ur|michaels?|burrs?|cubitys?|cubityfirsts?|owner)\b/i,
+        AGE_WORDS = ['old', 'age', 'aged', 'birthday', 'bday', 'born', 's', 'whats', 'hows'];
+
+    function asksMyAge(text) {
+        if (!AGE_QUESTION.test(text) || /\bwhere\b/i.test(text)) return false;
+        if (ABOUT_ME.test(text.replace(/[’']/g, ''))) return true;
+        return tokens(text).filter(function (w) { return AGE_WORDS.indexOf(w) < 0; }).length === 0;
+    }
+
     function run(text) {
         var words = text.trim().split(/\s+/),
             name = words[0].toLowerCase(),
             args = words.slice(1);
 
-        if (COMMANDS.hasOwnProperty(name)) return COMMANDS[name].run(args);
+        if (GREETING_ONLY.test(text.trim())) return COMMANDS.hi.run([]);
+        if (COMMANDS.hasOwnProperty(name) && COMMANDS[name] !== COMMANDS.hi) return COMMANDS[name].run(args);
+        if (words.length > 1 && asksMyAge(text)) return age();
 
-        return Promise.resolve(ask(text)).then(function (found) {
-            if (found) return;
-            if (words.length === 1 && !/\?$/.test(text)) {
-                print(err(name + ': command not found. '), dim('try '), cmd('help'), dim(', or ask a question.'));
-            } else {
-                print('I don’t have an answer for that one yet. try ', cmd('faq'), ', or ask me directly: ',
-                      link(LINKS.email.label, LINKS.email.href));
+        return askAI(text).then(function (result) {
+            if (result === true || result === 'cancelled') return;
+            // Refused by the model or blocked by the gateway's guardrails: say no, and
+            // don't go fishing in the FAQ (keyword matches there would answer something else)
+            if (result === 'declined' || result === 'blocked') {
+                return print('that’s not one I can answer. try ', cmd('help'), ', or ask me about me, my projects or this site.');
             }
+            if (result === 'busy') print(dim('(lots of questions right now, so here’s the quick version)'));
+            // Offline, busy or unavailable: fall back to the built-in FAQ
+            return Promise.resolve(ask(text)).then(function (found) {
+                if (!found) notFound(text);
+            });
         });
     }
 
+    /**
+     * Ctrl+C. While a command is running it's cancelled (an answer being fetched is
+     * dropped, one being typed stops where it is) and the prompt comes straight back.
+     * Otherwise, like a shell, the half-typed line is abandoned with ^C.
+     */
+    var job = null;   // the running command: { cancelled, cleanups, cancel }
+
+    function onCancel(fn) { if (job) job.cleanups.push(fn); }
+
+    function interrupt() {
+        stopTicker();
+        if (job && !job.cancelled) {
+            job.cancelled = true;
+            job.cleanups.forEach(function (fn) { try { fn(); } catch (e) { /* already gone */ } });
+            job.cancel();
+            print(dim('^C'));
+        } else {
+            echo(input.value).appendChild(dim('^C'));
+            input.value = '';
+            historyAt = history.length;
+        }
+        scrollDown();
+    }
+
     function submit(text) {
+        if (activeTUI) activeTUI.close();
+        stopTicker();
         finishIntro();
         queue = queue.then(function () {
             text = text.trim();
@@ -439,9 +753,12 @@
             if (!text) return;
             if (history[history.length - 1] !== text) history.push(text);
             historyAt = history.length;
-            return Promise.resolve(run(text)).catch(function () {
-                print(err('something went wrong running that.'));
+            var me = job = { cancelled: false, cleanups: [] };
+            var cancelled = new Promise(function (r) { me.cancel = r; });
+            var running = Promise.resolve().then(function () { return run(text); }).catch(function () {
+                if (!me.cancelled) print(err('something went wrong running that.'));
             });
+            return Promise.race([running, cancelled]).then(function () { if (job === me) job = null; });
         }).then(scrollDown);
         return queue;
     }
@@ -484,7 +801,12 @@
             complete();
         } else if (e.key === 'l' && e.ctrlKey) {
             e.preventDefault();
-            out.textContent = '';
+            clearScreen();
+        } else if (e.key === 'c' && e.ctrlKey && !e.shiftKey && !e.altKey) {
+            // Leave copying alone when something's selected
+            if (input.selectionStart !== input.selectionEnd || String(window.getSelection() || '')) return;
+            e.preventDefault();
+            interrupt();
         } else if (e.key === 'Escape') {
             input.value = '';
         }
@@ -492,7 +814,7 @@
 
     // Click anywhere in the terminal to type, unless selecting text or hitting a link
     body.addEventListener('click', function (e) {
-        if (e.target.closest('a, button')) return;
+        if (activeTUI || e.target.closest('a, button')) return;
         if (window.getSelection && String(window.getSelection())) return;
         if (introDone) input.focus({ preventScroll: true });
         else focusAfterIntro = true;
@@ -505,13 +827,20 @@
 
 
     /**
-     * Intro
+     * Intro: types whoami, ls and the last few activity lines, one after another.
+     * Clicking the terminal skips to the end; with reduced motion it prints instantly.
      */
+    var introStarted = false;
+
+    function fast() { return skipIntro || reducedMotion; }
+    function pause(ms) { return fast() ? Promise.resolve() : wait(ms); }
+
     function finishIntro() {
         skipIntro = true;
-        if (!introDone) startIntro();
+        if (!introStarted) startIntro();
     }
 
+    // Types `text` after the prompt, with a caret
     function typeCommand(text) {
         var line = print(promptNode()), typed = span('', 'p-cmd'), caret = span('', 'cursor');
         line.appendChild(typed);
@@ -519,7 +848,7 @@
         var i = 0;
         return new Promise(function (resolve) {
             (function next() {
-                if (skipIntro || reducedMotion || i >= text.length) {
+                if (fast() || i >= text.length) {
                     typed.textContent = text;
                     caret.remove();
                     return resolve();
@@ -530,37 +859,34 @@
         });
     }
 
-    var introStarted = false;
-    function startIntro() {
-        if (introStarted) return;
-        introStarted = true;
-        out.textContent = '';
-
+    function intro() {
         var steps = [
             ['whoami', tagline],
             ['ls', function () { return COMMANDS.ls.run([]); }],
             ['tail -n 5 activity.log', function () { return tail(5); }]
         ];
         var chain = Promise.resolve();
+        out.textContent = '';   // drops the <noscript> fallback
         steps.forEach(function (s, i) {
-            chain = chain.then(function () {
-                return skipIntro || reducedMotion ? null : wait(i ? 450 : 200);
-            }).then(function () {
-                return typeCommand(s[0]);
-            }).then(function () {
-                return s[1]();
-            }).then(function () {
-                print();
-            });
+            chain = chain.then(function () { return pause(i ? 450 : 200); })
+                .then(function () { return typeCommand(s[0]); })
+                .then(s[1])
+                .then(function () { print(); });
         });
-        queue = chain.then(function () {
+        return chain.then(function () {
             print(dim('type '), cmd('help'), dim(', or ask something like '),
-                  cmd('“how do I get in touch?”', 'how do I get in touch?'));
+                  cmd('\u201chow do I get in touch?\u201d', 'how do I get in touch?'));
             form.hidden = false;
             introDone = true;
             scrollDown();
             if (focusAfterIntro) input.focus({ preventScroll: true });
         });
+    }
+
+    function startIntro() {
+        if (introStarted) return;
+        introStarted = true;
+        queue = intro();
     }
 
     if (section.classList.contains('shown')) startIntro();
