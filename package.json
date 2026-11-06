@@ -1,13 +1,18 @@
 {
   "name": "cubityfirst",
   "private": true,
+  "type": "module",
   "description": "cubityfir.st / michaelburr.co.uk: static site plus a small Worker for the terminal's /api/ask",
   "scripts": {
-    "dev": "npx wrangler dev",
-    "deploy": "npx wrangler deploy",
-    "deploy:newsite": "npx wrangler deploy --env newsite"
+    "dev": "cf dev",
+    "deploy": "cf deploy",
+    "deploy:newsite": "cf deploy --mode newsite"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.4.0"
+  },
+  "devDependencies": {
+    "cf": "^1.0.0-beta.28",
+    "wrangler": "^4.158.0"
   }
 }

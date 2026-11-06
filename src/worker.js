@@ -2,7 +2,7 @@
  * cubityfir.st / michaelburr.co.uk Worker
  *
  * The site itself is static (public/, served as assets). This Worker only runs for
- * /api/* (see run_worker_first in wrangler.jsonc); everything else goes straight to the
+ * /api/* (see runWorkerFirst in cloudflare.config.ts); everything else goes straight to the
  * assets.
  *
  *   POST /api/ask   {question, history?, site?}  ->  {answer} | {error}

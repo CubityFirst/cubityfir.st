@@ -1,3 +1,6 @@
+// Superseded by cloudflare.config.ts, which cf (`npm run dev`, `npm run deploy`) uses.
+// Kept only for Wrangler commands that still read it (e.g. `npx wrangler secret put`,
+// `npx wrangler tail`) until it is removed; change settings in cloudflare.config.ts.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cubityfirst",
