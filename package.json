@@ -5,6 +5,7 @@
   "description": "cubityfir.st / michaelburr.co.uk: static site plus a small Worker for the terminal's /api/ask",
   "scripts": {
     "dev": "cf dev",
+    "build": "cf build",
     "deploy": "cf deploy",
     "deploy:newsite": "cf deploy --mode newsite"
   },
