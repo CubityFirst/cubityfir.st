@@ -1,26 +1,8 @@
 import { defineWranglerConfig } from "wrangler/experimental-config";
 
-export default defineWranglerConfig((ctx) => {
-	switch (ctx.mode) {
-		case "newsite": {
-			if (ctx.isPreview) {
-				return {
-					assetsDirectory: "public",
-				};
-			}
-			return {
-				assetsDirectory: "public",
-			};
-		}
-		default: {
-			if (ctx.isPreview) {
-				return {
-					assetsDirectory: "public",
-				};
-			}
-			return {
-				assetsDirectory: "public",
-			};
-		}
-	}
+// Wrangler build settings for `cf dev` / `cf build` / `cf deploy` (cf delegates the build
+// to Wrangler). The Worker config and bindings live in cloudflare.config.ts. Every mode
+// (production, newsite, Previews) serves the same static site.
+export default defineWranglerConfig({
+	assetsDirectory: "public",
 });
